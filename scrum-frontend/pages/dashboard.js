@@ -167,7 +167,7 @@ export default function Dashboard() {
   return (
     <>
       <Header />
-      <div className="flex flex-col w-full min-h-screen px-8 bg-gray-200 dark:bg-gray-900">
+      <div className="flex flex-col w-full h-full px-8 bg-gray-200 dark:bg-gray-900">
         <div className="flex justify-between items-center pt-6 pb-4">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
             <span className="text-blue-600 dark:text-blue-400">{product.name}</span> 产品报表

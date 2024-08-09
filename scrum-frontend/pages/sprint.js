@@ -125,14 +125,14 @@ export default function SprintManagement() {
     <>
       <Header />
       <div className="bg-gray-200">
-      <div className="container">
+      <div className="container ">
       <h1 className="text-3xl font-semibold  text-gray-800 flex items-center px-2 py-6 ">
         <span className="text-blue-600">{product?.name || "当前产品"}</span>
         <span className="mx-2">·</span>
         <span>迭代计划</span>
       </h1>
       <div className="flex min-h-screen w-full flex-col bg-muted/40">
-        <div className="flex flex-1 flex-col sm:flex-row w-full bg-white">
+        <div className="flex flex-1 flex-col sm:flex-row w-full bg-white rounded-lg mb-4">
           <History
             sprintList={sprintList}
             getSprintById={getSprintById}

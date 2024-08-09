@@ -17,10 +17,9 @@ const Story = ({ story, index, onStoryContentChange, deleteStory }) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
-          className="bg-green-400 p-4 mb-3 rounded-lg shadow-md flex justify-between items-center mx-2 h-fit"
+          className="bg-yellow-300 p-4 mb-3 rounded-lg shadow-md flex justify-between items-center mx-2 h-fit"
           style={{ 
             ...provided.draggableProps.style,
-            border: '1px solid #e2e8f0',
             transition: 'all 0.2s ease-in-out'
           }}
         >

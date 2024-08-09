@@ -114,7 +114,7 @@ const Backlog = () => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-200">
+    <div className="flex flex-col h-full min-h-screen bg-gray-200">
       <Header />
       <main className="flex-grow container mx-auto px-6 py-8">
         <h1 className="text-3xl font-semibold mb-6 text-gray-800 flex items-center px-2">
@@ -172,7 +172,7 @@ const Backlog = () => {
             </Select>
           </div>
         </div>
-        <div className="bg-white rounded-2xl shadow-sm overflow-hidden px-2">
+        <div className="bg-white rounded-2xl shadow-sm overflow-hidden px-2 py-8">
           <EditableDataGrid
             columns={columns}
             rows={filteredRows}

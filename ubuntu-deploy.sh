@@ -107,7 +107,14 @@ else
     echo "No build script found in package.json, skipping build step."
 fi
 
+# Kill any existing npm processes
+sudo fuser -k 3000/tcp
+
 if grep -q '"start"' package.json; then
+    # Wait a moment to ensure processes are terminated
+    sleep 2
+    
+    # Start the new process
     nohup npm run start > npm_start.log 2>&1 &
     FRONTEND_PID=$!
     echo "Frontend started with PID: $FRONTEND_PID"

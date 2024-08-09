@@ -69,7 +69,7 @@ const Column = ({
             </div>
             <button 
               onClick={() => addCard(columnId)}
-              className="bg-blue-500 p-2 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors duration-200"
+              className="bg-green-500 p-2 w-40 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors duration-200"
               aria-label="Add Feature"
               title="Add Feature"
             >

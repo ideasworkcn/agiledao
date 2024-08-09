@@ -26,7 +26,7 @@ const Card = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
-          className=" p-4 mb-4 rounded-lg shadow-md flex flex-col items-stretch mx-2 w-64 bg-blue-200"
+          className=" p-4 mb-4 rounded-lg shadow-md flex flex-col items-stretch mx-2 w-64 bg-green-200"
           style={{ 
             ...provided.draggableProps.style,
             border: '1px solid #e2e8f0',
@@ -81,7 +81,7 @@ const Card = ({
           </Droppable>
           <div className="mt-3 px-2">
             <button
-              className="w-full py-2 px-4 bg-green-500 text-white text-sm font-medium rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-150 ease-in-out flex items-center justify-center"
+              className="w-full py-2 px-4 bg-yellow-300 text-gray-900 text-sm font-medium rounded-md hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-150 ease-in-out flex items-center justify-center"
               onClick={() => addStory(item.id)}
             >
               <Plus className="w-4 h-4 mr-2" />

@@ -4,7 +4,7 @@ import React from "react";
 
 function History({ sprintList, getSprintById, productId, createSprint, product }) {
   return (
-    <aside className="hidden w-58 shrink-0 border-r bg-white sm:flex">
+    <aside className="hidden w-58 shrink-0 border-r bg-white sm:flex  rounded-lg">
       <div className="flex h-full flex-col p-4">
         <h3 className="mb-4 text-xl font-semibold text-gray-900">迭代规划列表</h3>
         <div className="space-y-3">
