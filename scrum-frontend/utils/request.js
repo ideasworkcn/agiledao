@@ -6,7 +6,7 @@ const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 // 创建 axios 实例
 const service = axios.create({
-  // baseURL: "http://localhost:8080/v1", // 设置基础请求地址
+  // baseURL: "http://localhost/service/v1", // 设置基础请求地址
   baseURL:baseURL,
   // baseURL: "http://scrum.ideaswork.cn/service/v1",
   timeout: 30 * 1000, // 请求超时时间
