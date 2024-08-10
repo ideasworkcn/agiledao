@@ -91,7 +91,7 @@ npm run dev
 
 欢迎在以下社交媒体平台上关注我们：
 
-- GitHub: [https://github.com/ideaswork/agiledao](https://github.com/ideaswork/agiledao)
+- GitHub: [https://github.com/ideasworkcn/agiledao](https://github.com/ideasworkcn/agiledao)
 - Gitee: [https://gitee.com/ideaswork/agiledao](https://gitee.com/ideaswork/agiledao)
 - Bilibili: [https://space.bilibili.com/28249524](https://space.bilibili.com/28249524)
 - Zhihu: [https://www.zhihu.com/people/wang-qing-gang-41](https://www.zhihu.com/people/wang-qing-gang-41)
