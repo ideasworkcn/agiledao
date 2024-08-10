@@ -67,13 +67,13 @@ const EditableDataGrid = ({
     <div ref={gridRef} className={`overflow-x-auto ${className}`} style={style}>
       <table className="w-full border-collapse">
         <thead>
-          <tr className={`h-${headerRowHeight} bg-gray-100`}>
+          <tr className="bg-gray-100">
             {columns.map((column) => (
               <th
                 key={column.key}
                 className={`
                   ${column.sortable ? 'cursor-pointer' : 'cursor-default'}
-                  p-2 sm:p-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700
+                  p-1 sm:p-2 border-b border-gray-300 text-left text-sm font-medium text-gray-700
                   ${column.width ? `w-${column.width}` : ''}
                   whitespace-nowrap overflow-hidden text-ellipsis
                 `}
