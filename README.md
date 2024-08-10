@@ -71,4 +71,4 @@ sh ubuntu-deploy.sh
 
 
 
-关于 scrum 知识请查看 ![scrum 是什么](./scrum.md)
+关于 scrum 知识请查看 [scrum 是什么](./scrum.md)
