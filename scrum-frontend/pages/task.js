@@ -12,10 +12,6 @@ import { PlusIcon } from "lucide-react";
 
 import {
   getSprintBacklogsAndTasks,
-  addTaskToSprint,
-  getTaskListBySprintId,
-  updateTask,
-  deleteTask,
   getTaskHours,
   updateTaskHours,
 } from "@/api/task.api";
@@ -45,6 +41,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import Router from "next/router";
+
 export default function Task() {
   const [sprint, setSprint] = useState({});
   const [sprintList, setSprintList] = useState([]);
@@ -55,140 +52,163 @@ export default function Task() {
   const [product, setProduct] = useState({});
 
   useEffect(() => {
-    // 检查是否登录，未登录则跳转
     const isLoggedIn = localStorage.getItem("token");
     if (!isLoggedIn) {
       Router.push("/login");
       return;
     }
-    let product = JSON.parse(localStorage.getItem("currentWorkspace"));
-    if (!product) {
-      return;
-    }
-    setProduct(product);
-    let productId = product.id;
-    // 获取 sprints
-    getSprints(productId).then((res) => {
-      setSprintList(res);
-      if (res.length > 0) {
-        setSprint(res[0]);
-        // 获取 sprint backlog
-        getSprintBacklogsAndTasks(res[0].id).then((res) => {
-          setBacklogList(res);
-        });
+
+    const storedProduct = JSON.parse(localStorage.getItem("currentWorkspace"));
+    if (!storedProduct) return;
+
+    setProduct(storedProduct);
+    const productId = storedProduct.id;
+
+    const fetchInitialData = async () => {
+      try {
+        const sprints = await getSprints(productId);
+        setSprintList(sprints);
+        if (sprints.length > 0) {
+          setSprint(sprints[0]);
+          const backlogsAndTasks = await getSprintBacklogsAndTasks(sprints[0].id);
+          setBacklogList(backlogsAndTasks);
+        }
+      } catch (error) {
+        console.error("Error fetching initial data:", error);
+        toast({ title: "Failed to load data", status: "error" });
       }
-    });
+    };
+
+    fetchInitialData();
   }, []);
 
   useEffect(() => {
-    // 获取 selectedTask 的工时信息
-    if (selectedTask) {
-      getTaskHours(selectedTask.id).then((res) => {
-        setSelectedTaskHours(res.taskHoursList);
-      });
-    }
+    const fetchTaskHours = async () => {
+      if (selectedTask) {
+        try {
+          const hours = await getTaskHours(selectedTask.id);
+          setSelectedTaskHours(hours.taskHoursList);
+        } catch (error) {
+          console.error("Error fetching task hours:", error);
+          toast({ title: "Failed to load task hours", status: "error" });
+        }
+      }
+    };
+
+    fetchTaskHours();
   }, [selectedTask]);
 
-  // 保存工时信息
-  const handleTaskHoursSave = () => {
-    console.log(selectedTaskHours);
-    updateTaskHours(selectedTaskHours).then((res) => {
-      console.log(res);
-      setSelectedTaskHours(res);
+  const handleTaskHoursSave = async () => {
+    try {
+      const updatedHours = await updateTaskHours(selectedTaskHours);
+      setSelectedTaskHours(updatedHours);
       setShowModal(false);
-      // 重新获取 backlog
-    });
+      toast({ title: "Task hours updated successfully", status: "success" });
+    } catch (error) {
+      console.error("Error updating task hours:", error);
+      toast({ title: "Failed to update task hours", status: "error" });
+    }
   };
 
-  const finishBacklog = (backlog) => {
-    backlog.status = "已完成";
-    window.confirm("确定完成 Backlog 吗？")
-      ? modifyBacklog(backlog).then((res) => {
-          getSprintBacklogsAndTasks(sprint.id).then((res) => {
-            setBacklogList(res);
-          });
-        })
-      : null;
+  const finishBacklog = async (backlog) => {
+    if (window.confirm("确定完成 Backlog 吗？")) {
+      try {
+        await modifyBacklog({ ...backlog, status: "已完成" });
+        const updatedBacklogs = await getSprintBacklogsAndTasks(sprint.id);
+        setBacklogList(updatedBacklogs);
+        toast({ title: "Backlog marked as completed", status: "success" });
+      } catch (error) {
+        console.error("Error finishing backlog:", error);
+        toast({ title: "Failed to complete backlog", status: "error" });
+      }
+    }
   };
 
-  const handleSprintChange = (sprint) => {
-    setSprint(sprint);
-    getSprintBacklogsAndTasks(sprint.id).then((res) => {
-      setBacklogList(res);
-    });
+  const handleSprintChange = async (newSprint) => {
+    setSprint(newSprint);
+    try {
+      const backlogsAndTasks = await getSprintBacklogsAndTasks(newSprint.id);
+      setBacklogList(backlogsAndTasks);
+    } catch (error) {
+      console.error("Error changing sprint:", error);
+      toast({ title: "Failed to load sprint data", status: "error" });
+    }
   };
 
   return (
     <>
       <Header />
-      <div className="flex flex-col h-screen bg-gray-200">
+      <div className="flex flex-col h-full  min-h-screen bg-gray-200">
         <header className="bg-white shadow-sm">
-          <div className="max-w-7xl  py-4 px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between">
-              <h1 className="text-lg font-semibold text-gray-900 flex items-center">
-                <KanbanIcon className="mr-2 h-5 w-5 text-gray-500 text-xl" />
-                <span className="text-blue-600 font-semibold">{product.name}</span>
-                <span className="mx-2 text-gray-400">·</span>
-                <span className="text-gray-800">{sprint.name}</span>
+          <div className="max-w-7xl py-4 px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0 lg:space-x-4">
+              <h1 className="text-lg sm:text-xl font-semibold text-gray-900 flex flex-wrap items-center">
+                <KanbanIcon className="mr-2 h-5 w-5 text-gray-500" />
+                <span className="text-blue-600 font-semibold break-all">{product.name}</span>
+                <span className="mx-2 text-gray-400 hidden sm:inline">·</span>
+                <span className="text-gray-800 break-all">{sprint.name}</span>
                 <span className="ml-2 text-gray-600">任务看板</span>
               </h1>
-              <div className="flex items-center justify-between space-x-4">
+              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 w-full lg:w-auto">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="outline"
                       size="sm"
-                      className="bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-200"
+                      className="bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-200 w-full sm:w-auto"
                     >
                       切换 Sprint 任务看板
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    {sprintList.map((sprint) => (
+                  <DropdownMenuContent align="end" className="w-full sm:w-auto">
+                    {sprintList.map((sprintItem) => (
                       <DropdownMenuItem
-                        key={sprint.id}
-                        onClick={() => handleSprintChange(sprint)}
+                        key={sprintItem.id}
+                        onClick={() => handleSprintChange(sprintItem)}
                       >
-                        {sprint.name}
+                        {sprintItem.name}
                       </DropdownMenuItem>
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
-              </div>
-              <div className="text-sm text-gray-600 hidden xl:flex">
-                目标：{sprint.goal}
-              </div>
-              <div className="text-sm text-gray-600 hidden xl:flex">
-                截止日期：{sprint.endDate}
+                <div className="text-sm text-gray-600 flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+                  <span className="break-words">目标：{sprint.goal}</span>
+                  <span>截止日期：{sprint.endDate}</span>
+                </div>
               </div>
             </div>
           </div>
         </header>
-        <main className="flex-1 overflow-auto py-6 px-4 sm:px-6 lg:px-8">
-          <Accordion type="single" collapsible className="space-y-4">
+        <main className="flex-1 py-4 sm:py-6 px-2 sm:px-4 lg:px-8">
+          <Accordion type="single" collapsible className="space-y-2 sm:space-y-4">
             {backlogList.map((backlog) => (
               <AccordionItem
                 key={backlog.id}
                 value={backlog.id}
                 className="bg-white rounded-lg shadow"
               >
-                <AccordionTrigger className="px-4 py-3 hover:bg-gray-50">
-                  <div className="flex items-center justify-between w-full text-left">
-                    <div className="flex items-center space-x-4 flex-grow">
-                      <div className="w-32 font-medium text-gray-700">
-                        {backlog.number}
-                      </div>
-                      <div className="flex-1 text-lg font-semibold text-gray-900 truncate">
-                        {backlog.name}
-                        <span className="ml-2 text-sm font-medium px-2 py-1 rounded-full bg-blue-100 text-blue-700">
+                <AccordionTrigger className="px-3 sm:px-4 py-2 sm:py-3 hover:bg-gray-50">
+                  <div className="flex flex-col lg:flex-row w-full text-left items-start justify-between">
+                    <div className="flex flex-col sm:flex-row lg:flex-row space-y-2 sm:space-y-0 lg:space-y-0 sm:space-x-4 lg:space-x-6 flex-grow">
+                      <div className="flex items-center justify-start w-full sm:w-auto">
+                        <div className="font-medium text-gray-700 text-sm sm:text-base">
+                          {backlog.number}
+                        </div>
+                        <span className="text-xs sm:text-sm font-medium px-2 py-1 rounded-full bg-blue-100 text-blue-700 ml-2">
                           {backlog.status}
                         </span>
                       </div>
+                      <div className="text-sm sm:text-base font-semibold text-gray-900 break-words flex-grow text-left">
+                        {backlog.name}
+                      </div>
+                      <div className="flex items-center gap-2 justify-start">
+                        {/* <div className="text-xs sm:text-sm text-gray-600">完成情况：</div> */}
+                        <div className="text-xs sm:text-sm font-medium text-blue-600 px-2">
+                          {calculateProgress(backlog.taskList)}%
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-4">
-                      {/* <div className="text-sm text-gray-600">
-                        完成进度: {calculateProgress(backlog.taskList)}%
-                      </div> */}
+                    <div className="mt-3 lg:mt-0 w-full sm:w-auto">
                       <Button
                         variant="outline"
                         size="sm"
@@ -196,14 +216,14 @@ export default function Task() {
                           e.stopPropagation();
                           finishBacklog(backlog);
                         }}
-                        className="bg-green-500 text-white hover:bg-green-600 transition-colors duration-200"
+                        className="bg-green-500 text-white hover:bg-green-600 transition-colors duration-200 text-xs w-full sm:w-auto"
                       >
                         完成 Backlog
                       </Button>
                     </div>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className="px-4 py-3 bg-gray-50 rounded-b-lg">
+                <AccordionContent className="px-3 sm:px-4 py-2 sm:py-3 bg-gray-50 rounded-b-lg">
                   <TaskBoard
                     sprint={sprint}
                     backlog={backlog}
@@ -232,12 +252,11 @@ export default function Task() {
     </>
   );
 }
+
 function calculateProgress(taskList) {
   if (!taskList || taskList.length === 0) return 0;
   const completedTasks = taskList.filter(task => task.status === "done").length;
-  const progress = Math.round((completedTasks / taskList.length) * 100);
-  
-  return progress;
+  return Math.round((completedTasks / taskList.length) * 100);
 }
 
 function EditableTable({
@@ -250,7 +269,7 @@ function EditableTable({
   handleTaskHoursSave,
 }) {
   const handleAddRow = () => {
-    const TaskHours = {
+    const newTaskHour = {
       id: "",
       note: "",
       productId: sprint.productId,
@@ -261,13 +280,14 @@ function EditableTable({
       createTime: "",
       hours: 0,
     };
-    setSelectedTaskHours([...selectedTaskHours, TaskHours]);
+    setSelectedTaskHours([...selectedTaskHours, newTaskHour]);
   };
 
   const handleChange = (index, field, value) => {
-    const newRows = [...selectedTaskHours];
-    newRows[index][field] = value;
-    setSelectedTaskHours(newRows);
+    const updatedHours = selectedTaskHours.map((hour, i) =>
+      i === index ? { ...hour, [field]: value } : hour
+    );
+    setSelectedTaskHours(updatedHours);
   };
 
   return (
@@ -278,7 +298,7 @@ function EditableTable({
             {selectedTask ? "任务工时" : "任务工时"}
           </DialogTitle>
           <DialogDescription className="text-gray-600">
-            {selectedTask ? "编辑工时信息并保存更改" : "编辑工时信息并保存更改"}
+            编辑工时信息并保存更改
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-6">

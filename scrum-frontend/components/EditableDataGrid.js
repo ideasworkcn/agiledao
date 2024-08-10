@@ -64,41 +64,42 @@ const EditableDataGrid = ({
   }, []);
 
   return (
-    <div ref={gridRef} className={className} style={style}>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+    <div ref={gridRef} className={`overflow-x-auto ${className}`} style={style}>
+      <table className="w-full border-collapse">
         <thead>
-          <tr style={{ height: `${headerRowHeight}px` }}>
+          <tr className={`h-${headerRowHeight} bg-gray-100`}>
             {columns.map((column) => (
               <th
                 key={column.key}
-                style={{ 
-                  width: column.width, 
-                  cursor: column.sortable ? 'pointer' : 'default',
-                  padding: '8px',
-                  borderBottom: '1px solid #ddd',
-                  textAlign: 'left'
-                }}
+                className={`
+                  ${column.sortable ? 'cursor-pointer' : 'cursor-default'}
+                  p-2 sm:p-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700
+                  ${column.width ? `w-${column.width}` : ''}
+                  whitespace-nowrap overflow-hidden text-ellipsis
+                `}
                 onClick={() => column.sortable && handleSort(column.key)}
+                title={column.name}
               >
-                {column.name}
-                {column.sortable && sortColumn === column.key && (
-                  <span>{sortDirection === 'asc' ? ' ▲' : ' ▼'}</span>
-                )}
+                <div className="flex items-center justify-between">
+                  <span className="truncate">{column.name}</span>
+                  {column.sortable && sortColumn === column.key && (
+                    <span className="ml-1 flex-shrink-0">{sortDirection === 'asc' ? '▲' : '▼'}</span>
+                  )}
+                </div>
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
           {sortedRows.map((row, rowIndex) => (
-            <tr key={rowIndex} style={{ height: `${rowHeight}px` }}>
+            <tr key={rowIndex} className={`h-${rowHeight} hover:bg-gray-50`}>
               {columns.map((column) => (
                 <td
                   key={column.key}
-                  style={{ 
-                    width: column.width, 
-                    padding: '8px',
-                    borderBottom: '1px solid #ddd'
-                  }}
+                  className={`
+                    p-2 sm:p-3 border-b border-gray-200 text-sm text-gray-900
+                    ${column.width ? `w-${column.width}` : ''}
+                  `}
                   onClick={() => handleCellClick(rowIndex, column.key)}
                 >
                   {editCell && editCell.rowIndex === rowIndex && editCell.columnKey === column.key ? (
@@ -108,20 +109,10 @@ const EditableDataGrid = ({
                       defaultValue={row[column.key]}
                       onBlur={(e) => handleCellChange(rowIndex, column.key, e.target.value)}
                       autoFocus
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        padding: '8px',
-                        border: 'none',
-                        borderRadius: '4px',
-                        fontSize: '14px',
-                        outline: 'none',
-                        boxShadow: '0 0 0 2px rgba(0, 122, 255, 0.5)',
-                        transition: 'box-shadow 0.2s ease-in-out'
-                      }}
+                      className="w-full h-full p-1 border-none rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow duration-200"
                     />
                   ) : (
-                    row[column.key]
+                    <div className="truncate">{row[column.key]}</div>
                   )}
                 </td>
               ))}

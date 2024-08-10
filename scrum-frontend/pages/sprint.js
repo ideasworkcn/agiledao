@@ -126,28 +126,30 @@ export default function SprintManagement() {
       <Header />
       <div className="bg-gray-200">
       <div className="container ">
-      <h1 className="text-3xl font-semibold  text-gray-800 flex items-center px-2 py-6 ">
-        <span className="text-blue-600">{product?.name || "当前产品"}</span>
-        <span className="mx-2">·</span>
-        <span>迭代计划</span>
+      <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 flex flex-wrap items-center px-2 py-4 sm:py-6">
+        <span className="text-blue-600 break-all">{product?.name || "当前产品"}</span>
+        <span className="mx-2 hidden sm:inline">·</span>
+        <span className="w-full sm:w-auto mt-2 sm:mt-0">迭代计划</span>
       </h1>
       <div className="flex min-h-screen w-full flex-col bg-muted/40">
-        <div className="flex flex-1 flex-col sm:flex-row w-full bg-white rounded-lg mb-4">
+        <div className="flex flex-1 flex-col md:flex-row w-full bg-white rounded-lg mb-4">
           <History
             sprintList={sprintList}
             getSprintById={getSprintById}
             productId={productId}
             createSprint={createSprint}
             product={product}
+            className="w-full md:w-64 lg:w-72 mb-4 md:mb-0"
           />
-          <main className="flex-1 p-4 sm:p-6">
-            <div className="grid gap-6">
+          <main className="flex-1 p-4 md:p-6">
+            <div className="grid gap-4 md:gap-6">
               <SprintInfo
                 product={product}
                 sprint={sprint}
                 deleteSprintById={deleteSprintById}
                 updateSprintById={updateSprintById}
                 saveSprint={saveSprintContent}
+                className="w-full"
               />
               <SprintBacklog
                 sprint={sprint}
@@ -156,6 +158,7 @@ export default function SprintManagement() {
                 setSprintBacklogList={setSprintBacklogList}
                 setBacklogList={setBacklogList}
                 removeBacklogFromSprint={removeBacklogFromSprint}
+                className="w-full"
               />
             </div>
           </main>
@@ -177,8 +180,8 @@ function SprintInfo({
 }) {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="text-2xl font-semibold flex w-xl items-center">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
+        <div className="text-2xl font-semibold flex w-full sm:w-xl items-center">
           <Input
             className="outline-none border-none focus:outline-none px-0 text-gray-900 text-2xl font-semibold w-full min-w-fit"
             type="text"
@@ -189,12 +192,12 @@ function SprintInfo({
             value={sprint.name || ""}
           />
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
           <Button
             variant="outline"
             size="sm"
             onClick={() => saveSprint()}
-            className="rounded-full bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600 transition-colors"
+            className="rounded-full bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600 transition-colors w-full sm:w-auto"
           >
             保存 Sprint
           </Button>
@@ -206,7 +209,7 @@ function SprintInfo({
                 deleteSprintById(sprint.id);
               }
             }}
-            className="rounded-full border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="rounded-full border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors w-full sm:w-auto"
           >
             删除 Sprint
           </Button>

@@ -47,7 +47,7 @@ const Header = () => {
       { href: "/sprint", label: "Sprint", role: "Scrum Master" },
       { href: "/task", label: "Task", role: "*" },
       { href: "/user", label: "User", role: "Scrum Master" },
-      { href: "/login", label: "Login", role: "*" },
+      // { href: "/login", label: "Login", role: "*" },
     ];
 
     const productOwnerMasterNav = [
@@ -56,14 +56,14 @@ const Header = () => {
       { href: "/userstory", label: "UserStory", role: "Product Owner" },
       { href: "/backlog", label: "Backlog", role: "Product Owner" },
       { href: "/task", label: "Task", role: "*" },
-      { href: "/login", label: "Login", role: "*" },
+      // { href: "/login", label: "Login", role: "*" },
     ];
 
     const scrumTeamNav = [
       { href: "/", label: "Home", role: "*" },
       { href: "/dashboard", label: "Dashboard", role: "*" },
       { href: "/task", label: "Task", role: "*" },
-      { href: "/login", label: "Login", role: "*" },
+      // { href: "/login", label: "Login", role: "*" },
     ];
     
     if (role) {
@@ -79,17 +79,15 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-white px-4 md:px-6 shadow-sm">
-      <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+      <nav className="hidden md:flex flex-col md:flex-row items-center gap-2 lg:gap-4 text-lg font-medium md:text-sm">
         <Link
           href="#"
-          className="flex items-center gap-2 text-lg font-semibold md:text-base ml-10"
+          className="flex items-center gap-2 text-lg font-semibold md:text-base ml-2 md:ml-4"
           prefetch={false}
         >
-          {/* <Package className="h-6 w-6 text-blue-500" />
-           */}
-          <img src="/favicon.ico" alt="AgileDao Logo" className="h-10 w-10 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-1.5 shadow-md hover:shadow-lg transition-shadow duration-300" style={{ backgroundImage: 'conic-gradient(from 0deg, #8b5cf6, #ec4899, #ef4444)' }} />
+          <img src="/favicon.ico" alt="AgileDao Logo" className="h-6 w-6 md:h-8 md:w-8 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-1 md:p-1.5 shadow-md hover:shadow-lg transition-shadow duration-300" style={{ backgroundImage: 'conic-gradient(from 0deg, #8b5cf6, #ec4899, #ef4444)' }} />
 
-          <span className="hidden md:inline w-40 text-gray-800">
+          <span className="hidden lg:inline w-32 text-gray-800 truncate">
              AgileDao
           </span>
         </Link>
@@ -98,7 +96,7 @@ const Header = () => {
           <Link
             key={item.href}
             href={item.href}
-            className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ease-in-out
+            className={`px-2 py-1 rounded-md text-xs font-medium transition-colors duration-200 ease-in-out
               ${pathname === item.href 
                 ? "bg-blue-500 text-white" 
                 : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
@@ -116,14 +114,14 @@ const Header = () => {
             <span className="sr-only">Toggle navigation menu</span>
           </Button>
         </SheetTrigger>
-        <SheetContent side="left">
-          <nav className="grid gap-6 text-lg font-medium">
+        <SheetContent side="left" className="w-[250px] sm:w-[300px]">
+          <nav className="grid gap-4 text-base font-medium">
             <Link
               href="#"
               className="flex items-center gap-2 text-lg font-semibold"
               prefetch={false}
             >
-              <Package className="h-6 w-6 text-blue-500" />
+              <img src="/favicon.ico" alt="AgileDao Logo" className="h-8 w-8 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-1.5 shadow-md" style={{ backgroundImage: 'conic-gradient(from 0deg, #8b5cf6, #ec4899, #ef4444)' }} />
               <span className="text-gray-800">敏捷之道 AgileDao</span>
             </Link>
             {navItems.map((item) => (
@@ -143,8 +141,8 @@ const Header = () => {
           </nav>
         </SheetContent>
       </Sheet>
-      <div className="flex w-full items-center justify-end gap-4 md:ml-auto md:gap-2 lg:gap-4">
-        <span className="text-sm font-medium ml-auto text-gray-700">{name}</span>
+      <div className="flex w-full items-center justify-end gap-2 md:gap-4 md:ml-auto">
+        <span className="hidden md:inline-block text-xs font-medium ml-auto text-gray-700 truncate max-w-[100px]">{name}</span>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -152,12 +150,12 @@ const Header = () => {
               size="icon"
               className="rounded-full hover:bg-gray-100"
             >
-              <User className="h-5 w-5 text-gray-700" />
+              <User className="h-4 w-4 md:h-5 md:w-5 text-gray-700" />
               <span className="sr-only">Toggle user menu</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuItem className="cursor-pointer" onClick={() => {
+          <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuItem className="cursor-pointer text-sm" onClick={() => {
               localStorage.clear();
               window.location.href = '/login';
             }}>

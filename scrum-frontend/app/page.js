@@ -75,8 +75,8 @@ const HomePage = () => {
     },
     {
       href: "/backlog",
-      title: "待办事项",
-      content: "查看和管理待办事项",
+      title: "产品待办",
+      content: "查看和管理产品待办",
       icon: ListTodo,
       color: "text-green-500",
     },
@@ -119,23 +119,23 @@ const HomePage = () => {
         <p className="text-center text-gray-600 dark:text-gray-400 mb-12 text-xl">
           极简敏捷开发 Scrum 管理工具
         </p>
-        <div className="bg-gray-50 dark:bg-gray-900 rounded-3xl shadow-lg p-8 mb-12">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <h2 className="text-2xl text-gray-800 dark:text-gray-200">
+        <div className="bg-gray-50 dark:bg-gray-900 rounded-3xl shadow-lg p-4 sm:p-6 md:p-8 mb-8 sm:mb-10 md:mb-12">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-6">
+            <h2 className="text-xl sm:text-2xl text-gray-800 dark:text-gray-200 mb-4 sm:mb-0">
               当前产品:{" "}
-              <span className="text-3xl font-semibold text-blue-600 dark:text-blue-400">
+              <span className="text-2xl sm:text-3xl font-semibold text-blue-600 dark:text-blue-400 block sm:inline mt-1 sm:mt-0">
                 {currentWorkspace.name}
               </span>
             </h2>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline"
-                    className="bg-white text-gray-800 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-full shadow-sm transition-colors duration-200 flex items-center space-x-2 px-6 py-3 text-lg"
+                    className="w-full sm:w-auto bg-white text-gray-800 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-full shadow-sm transition-colors duration-200 flex items-center justify-center space-x-2 px-4 sm:px-6 py-2 sm:py-3 text-base sm:text-lg"
                   >
                     <span>切换产品</span>
-                    <ChevronDownIcon className="h-5 w-5" />
+                    <ChevronDownIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
@@ -143,7 +143,7 @@ const HomePage = () => {
                     <DropdownMenuItem
                       key={workspace.id}
                       onClick={() => handleWorkspaceChange(workspace)}
-                      className="hover:bg-gray-100 dark:hover:bg-gray-700 px-4 py-2 text-lg"
+                      className="hover:bg-gray-100 dark:hover:bg-gray-700 px-3 sm:px-4 py-1 sm:py-2 text-base sm:text-lg"
                     >
                       {workspace.name}
                     </DropdownMenuItem>
@@ -153,7 +153,7 @@ const HomePage = () => {
               <Button
                 variant="outline"
                 onClick={handleManageWorkspaces}
-                className="hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full px-6 py-3 text-lg"
+                className="w-full sm:w-auto hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full px-4 sm:px-6 py-2 sm:py-3 text-base sm:text-lg"
               >
                 管理产品
               </Button>

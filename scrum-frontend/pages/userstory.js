@@ -68,13 +68,13 @@ const StoryBoard = () => {
     <div className="flex flex-col min-h-screen">
       <Header />
       <main className="flex-grow flex flex-col p-4 md:p-6 bg-gray-200">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 border-b-2 border-blue-300 dark:border-blue-700 pb-2 pl-2">
-            {product.name}<span className="text-gray-800 dark:text-gray-200"> 用户故事地图</span>
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 space-y-4 sm:space-y-0">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-blue-600 dark:text-blue-400 border-b-2 border-blue-300 dark:border-blue-700 pb-2 pl-2 w-full sm:w-auto text-center sm:text-left">
+            {product.name}<span className="text-gray-800 dark:text-gray-200 block sm:inline"> 用户故事地图</span>
           </h1>
           <Button
             onClick={toggleFullscreen}
-            className="bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            className="bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 text-sm sm:text-base px-3 py-1 sm:px-4 sm:py-2"
           >
             {isFullscreen ? "退出全屏" : "全屏显示"}
           </Button>
