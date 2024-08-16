@@ -33,7 +33,7 @@
 
 局域网内直接在员工电脑运行即可。
 
-如需公网访问推荐 [腾讯云轻量服务器国外节点}(https://cloud.tencent.com/product/lighthouse)
+如需公网访问推荐 [腾讯云轻量服务器国外节点}(https://curl.qcloud.com/zlDFDIiZ)
 
 #### 软件版本：
 
