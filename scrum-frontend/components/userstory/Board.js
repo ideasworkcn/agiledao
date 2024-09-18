@@ -154,16 +154,27 @@ const Board = ({ columns, setColumns, product }) => {
     }
   };
 
-  const addColumn = () => {
-    addEpic({
+  const addColumn = ({columnId}) => {
+    const columnIndex = columns.findIndex((column) => column.id === columnId);
+    const newColumn = {
       id: null,
       name: `Epic Story ${columns.length + 1}`,
       number: "",
       productId: productId,
-    }).then((data) => {
+      px: columnIndex  // Corrected px assignment
+    };
+
+    addEpic(newColumn).then((data) => {
       console.log(data);
-      setColumns([...columns, data]);
+      const updatedColumns = columns.map((column, index) => ({
+        ...column,
+        px: index > columnIndex ? column.px + 1 : column.px, // Increment px for columns after the new column
+      }));
+      const newColumnWithId = { ...newColumn, id: data.id }; // Ensure newColumn has the ID from the response
+      updatedColumns.splice(columnIndex + 1, 0, newColumnWithId);
+      setColumns(updatedColumns);
     });
+
   };
 
   const deleteColumn = (columnId) => {
@@ -353,6 +364,7 @@ const Board = ({ columns, setColumns, product }) => {
                 column={column}
                 columnId={column.id}
                 index={index}
+                addColumn={addColumn}
                 addCard={addCard}
                 deleteCard={deleteCard}
                 onColumnNameChange={updateColumnName}
@@ -369,7 +381,7 @@ const Board = ({ columns, setColumns, product }) => {
       </Droppable>
      
     </DragDropContext>
-      <button
+      {/* <button
         className="mt-4 w-36 min-w-36 bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center"
         onClick={addColumn}
       >
@@ -377,7 +389,7 @@ const Board = ({ columns, setColumns, product }) => {
           <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
         </svg>
         Add Epic
-      </button>
+      </button> */}
     </>
   );
 };

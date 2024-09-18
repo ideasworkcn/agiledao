@@ -14,8 +14,8 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
       dialect: org.hibernate.dialect.MySQL8Dialect
+      ddl-auto: update
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER

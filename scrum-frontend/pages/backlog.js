@@ -114,7 +114,7 @@ const Backlog = () => {
   }, []);
 
   return (
-    <div className="flex flex-col h-full min-h-screen bg-gray-200">
+    <div className="flex flex-col h-full min-h-screen bg-white">
       <Header />
       <main className="flex-grow container mx-auto px-6 py-8">
         <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 sm:mb-6 text-gray-800 flex flex-wrap items-center px-2">

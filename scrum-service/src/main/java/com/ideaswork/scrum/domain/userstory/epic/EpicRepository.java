@@ -15,4 +15,7 @@ public interface EpicRepository extends JpaRepository<Epic, String> {
 
     @Query(value = "select max(px) from epic where product_id = ?1", nativeQuery = true)
     Integer findMaxPx(String productId);
+
+    @Query(value = "select * from epic where px > ?1", nativeQuery = true)
+    List<Epic> findByPxGreaterThan(int px);
 }

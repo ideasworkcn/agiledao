@@ -53,7 +53,7 @@ export default function Password() {
   return (
     <>
       <Header />
-      <div className="min-h-screen w-full flex items-center justify-center  bg-gradient-to-r from-blue-500 to-purple-600">
+      <div className="min-h-screen w-full flex items-center justify-center bg-white">
         <Card className="w-full max-w-md bg-white shadow-lg rounded-2xl">
           <CardHeader className="space-y-1 p-6">
             <CardTitle className="text-2xl font-semibold text-gray-900">修改密码</CardTitle>

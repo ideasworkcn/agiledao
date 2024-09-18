@@ -111,7 +111,7 @@ const HomePage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-200 dark:bg-black">
+    <div className="min-h-screen bg-white dark:bg-black">
       <div className="container mx-auto px-4 py-16">
         <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4 text-center">
           敏捷之道 AgileDao
@@ -119,7 +119,7 @@ const HomePage = () => {
         <p className="text-center text-gray-600 dark:text-gray-400 mb-12 text-xl">
           极简敏捷开发 Scrum 管理工具
         </p>
-        <div className="bg-gray-50 dark:bg-gray-900 rounded-3xl shadow-lg p-4 sm:p-6 md:p-8 mb-8 sm:mb-10 md:mb-12">
+        <div className="bg-gray-50 border border-gray-100 dark:bg-gray-900 rounded-3xl  p-4 sm:p-6 md:p-8 mb-8 sm:mb-10 md:mb-12">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-6">
             <h2 className="text-xl sm:text-2xl text-gray-800 dark:text-gray-200 mb-4 sm:mb-0">
               当前产品:{" "}
@@ -132,7 +132,7 @@ const HomePage = () => {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-full sm:w-auto bg-white text-gray-800 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-full shadow-sm transition-colors duration-200 flex items-center justify-center space-x-2 px-4 sm:px-6 py-2 sm:py-3 text-base sm:text-lg"
+                    className="w-full sm:w-auto bg-white text-gray-800 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-full  transition-colors duration-200 flex items-center justify-center space-x-2 px-4 sm:px-6 py-2 sm:py-3 text-base sm:text-lg"
                   >
                     <span>切换产品</span>
                     <ChevronDownIcon className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -163,7 +163,7 @@ const HomePage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {menuItems.map((item) => (
             <Link href={item.href} key={item.href} className="block">
-              <Card className="bg-gray-50 dark:bg-gray-900 rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
+              <Card className="bg-gray-50 dark:bg-gray-900 rounded-3xl overflow-hidden hover:shadow-xl transition-shadow duration-300">
                 <CardContent className="p-8">
                   <div className="flex items-center mb-4">
                     {item.icon && <item.icon className={`w-10 h-10 ${item.color}`} />}

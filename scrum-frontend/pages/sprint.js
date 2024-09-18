@@ -124,7 +124,7 @@ export default function SprintManagement() {
   return (
     <>
       <Header />
-      <div className="bg-gray-200">
+      <div className="bg-white">
       <div className="container ">
       <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 flex flex-wrap items-center px-2 py-4 sm:py-6">
         <span className="text-blue-600 break-all">{product?.name || "当前产品"}</span>
