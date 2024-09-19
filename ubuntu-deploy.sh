@@ -25,21 +25,28 @@ then
     
     # Set MySQL root password and secure the installation
     MYSQL_ROOT_PASSWORD="agiledao"
-    sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$MYSQL_ROOT_PASSWORD';"
-    sudo mysql -e "DELETE FROM mysql.user WHERE User='';"
-    sudo mysql -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
-    sudo mysql -e "DROP DATABASE IF EXISTS test;"
-    sudo mysql -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';"
-    sudo mysql -e "FLUSH PRIVILEGES;"
+    sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER 'root'@'%' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';"
+    sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
+    sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';"
+    sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;"
+    sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='';"
+    sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES;"
     # Create database
-    sudo mysql -e "CREATE DATABASE IF NOT EXISTS agiledao;"
+    sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS agiledao;"
     echo "Database 'agiledao' has been created."
 else
     echo "MySQL is already installed."
        # Create database
-    sudo mysql -e "CREATE DATABASE IF NOT EXISTS agiledao;"
+    sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS agiledao;"
     echo "Database 'agiledao' has been created."
 fi
+
+# Allow MySQL remote access
+sudo sed -i "s/bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
+sudo systemctl restart mysql
+
+# Allow MySQL port through firewall
+sudo ufw allow 3306/tcp
 
 # Check if Java is installed
 if ! command -v java &> /dev/null
@@ -98,7 +105,7 @@ if [ ! -f package.json ]; then
     exit 1
 fi
 
-npm install
+sudo npm install
 
 if grep -q '"build"' package.json; then
     rm -rf .next/
@@ -128,7 +135,7 @@ cd ../scrum-service
 nohup sudo java -jar scrum-0.0.1-SNAPSHOT.jar \
     --spring.datasource.url="jdbc:mysql://localhost:3306/agiledao?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true" \
     --spring.datasource.username=root \
-    --spring.datasource.password=agiledao  > backend.log 2>&1 &
+    --spring.datasource.password="$MYSQL_ROOT_PASSWORD" > backend.log 2>&1 &
 BACKEND_PID=$!
 
 echo "Backend service started with PID: $BACKEND_PID"
