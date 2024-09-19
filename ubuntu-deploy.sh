@@ -25,18 +25,31 @@ then
     sudo systemctl enable mysql
     
     # Set MySQL root password and secure the installation
-    sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER 'root'@'%' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';"
-    sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
-    sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';"
-    sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;"
-    sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "DELETE FROM mysql.user WHERE User='';"
-    sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES;"
+    sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$MYSQL_ROOT_PASSWORD';"
+    sudo mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;"
+    sudo mysql -e "FLUSH PRIVILEGES;"
+    
+    # Create remote user and grant privileges
+    sudo mysql -e "CREATE USER '$MYSQL_REMOTE_USER'@'$MYSQL_REMOTE_HOST' IDENTIFIED BY '$MYSQL_REMOTE_PASSWORD';"
+    sudo mysql -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_REMOTE_USER'@'$MYSQL_REMOTE_HOST' WITH GRANT OPTION;"
+    sudo mysql -e "FLUSH PRIVILEGES;"
+    
     # Create database
     sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS agiledao;"
     echo "Database 'agiledao' has been created."
 else
     echo "MySQL is already installed."
-       # Create database
+    # Ensure MySQL root password and permissions are set
+    sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$MYSQL_ROOT_PASSWORD';"
+    sudo mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;"
+    sudo mysql -e "FLUSH PRIVILEGES;"
+    
+    # Create remote user and grant privileges
+    sudo mysql -e "CREATE USER '$MYSQL_REMOTE_USER'@'$MYSQL_REMOTE_HOST' IDENTIFIED BY '$MYSQL_REMOTE_PASSWORD';"
+    sudo mysql -e "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_REMOTE_USER'@'$MYSQL_REMOTE_HOST' WITH GRANT OPTION;"
+    sudo mysql -e "FLUSH PRIVILEGES;"
+    
+    # Create database
     sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS agiledao;"
     echo "Database 'agiledao' has been created."
 fi
@@ -47,6 +60,14 @@ sudo systemctl restart mysql
 
 # Allow MySQL port through firewall
 sudo ufw allow 3306/tcp
+# Allow HTTP and application ports through firewall
+sudo ufw allow 80/tcp
+
+
+# Enable and start the firewall
+sudo ufw enable
+sudo ufw status
+
 
 # Check if Java is installed
 if ! command -v java &> /dev/null
@@ -133,7 +154,7 @@ echo "Repository updated and project set up successfully!"
 # Start backend service
 cd ../scrum-service
 nohup sudo java -jar scrum-0.0.1-SNAPSHOT.jar \
-    --spring.datasource.url="jdbc:mysql://localhost:3306/agiledao?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true" \
+    --spring.datasource.url="jdbc:mysql://localhost:3306/agiledao?useSSL=false&serverTimezone=UTC" \
     --spring.datasource.username=root \
     --spring.datasource.password="$MYSQL_ROOT_PASSWORD" > backend.log 2>&1 &
 BACKEND_PID=$!

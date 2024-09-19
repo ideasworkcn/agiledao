@@ -80,6 +80,17 @@ export default function Component() {
           project.id === selectedProject.id ? data : project
         );
         setProjects(updatedProjects);
+
+         // Update localStorage if the current product is the selected product
+          // Retrieve currentWorkspace from localStorage
+        const currentWorkspace = JSON.parse(localStorage.getItem('currentWorkspace'));
+
+        // Update localStorage if the current product is the selected product
+        if (currentWorkspace && currentWorkspace.id === selectedProject.id) {
+          localStorage.setItem('currentWorkspace', JSON.stringify(newProject));
+        }
+
+
         setShowModal(false);
         setSelectedProject(null);
         toast({ title: "保存成功", status: "success" });
