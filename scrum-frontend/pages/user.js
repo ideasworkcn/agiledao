@@ -124,7 +124,7 @@ export default function UserManagement() {
   return (
     <>
       <Header />
-      <div className="flex min-h-screen w-full flex-col bg-gray-200">
+      <div className="flex min-h-screen w-full flex-col bg-white">
         <div className="container mx-auto px-4 py-8">
           <main className="space-y-6">
             <Tabs defaultValue="users" className="w-full">

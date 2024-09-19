@@ -26,7 +26,7 @@ const Card = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
-          className=" p-4 mb-4 rounded-lg shadow-md flex flex-col items-stretch mx-2 w-64 bg-green-200"
+          className=" p-4 mb-4 rounded-lg shadow-md flex flex-col items-stretch mx-2 w-64 bg-blue-200"
           style={{ 
             ...provided.draggableProps.style,
             border: '1px solid #e2e8f0',

@@ -42,11 +42,21 @@ public class EpicServiceImpl implements EpicService {
         String s = IdGenerator.generateNextEpic(number);
         epic.setNumber(s);
         // 获取当前最大的px
-        Integer maxPx = epicRepository.findMaxPx(productId);
-        if (maxPx == null) {
-            maxPx = 0;
+//        Integer maxPx = epicRepository.findMaxPx(productId);
+//        if (maxPx == null) {
+//            maxPx = 0;
+//        }
+//        epic.setPx(maxPx + 1);
+        // Find all epics with px greater than the current px
+        List<Epic> epicsToUpdate = epicRepository.findByPxGreaterThan(epic.getPx());
+
+        // Increment the px value for each epic
+        for (Epic epicDB : epicsToUpdate) {
+            epicDB.setPx(epicDB.getPx() + 1);
         }
-        epic.setPx(maxPx + 1);
+
+        // Save the updated epics back to the repository
+        epicRepository.saveAll(epicsToUpdate);
         return epicRepository.save(epic);
     }
 

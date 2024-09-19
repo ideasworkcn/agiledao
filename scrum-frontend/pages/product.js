@@ -123,7 +123,7 @@ export default function Component() {
   return (
     <>
       <Header />
-      <div className="bg-gray-200">
+      <div className="bg-white">
       <div className="h-screen container py-8 ">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-gray-800">产品管理</h1>

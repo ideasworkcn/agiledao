@@ -51,8 +51,8 @@ export default function Page() {
   return (
     <>
       <Header />
-      <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
-        <div className="max-w-md w-full px-6 py-8 bg-white rounded-lg shadow-xl">
+      <div className="min-h-screen w-full flex items-center justify-center bg-white">
+        <div className="max-w-md w-full px-6 py-8 border border-gray-100 bg-white rounded-lg shadow-xl">
           <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">敏捷之道 AgileDao</h1>
           <Card className="border-0 shadow-none">
             <CardHeader>

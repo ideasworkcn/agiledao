@@ -33,7 +33,7 @@
 
 局域网内直接在员工电脑运行即可。
 
-如需公网访问推荐 [腾讯云轻量服务器国外节点}(https://cloud.tencent.com/product/lighthouse)
+如需公网访问推荐 [腾讯云轻量服务器国外节点}(https://curl.qcloud.com/zlDFDIiZ)
 
 #### 软件版本：
 
@@ -91,7 +91,7 @@ npm run dev
 
 欢迎在以下社交媒体平台上关注我们：
 
-- GitHub: [https://github.com/ideaswork/agiledao](https://github.com/ideaswork/agiledao)
+- GitHub: [https://github.com/ideasworkcn/agiledao](https://github.com/ideasworkcn/agiledao)
 - Gitee: [https://gitee.com/ideaswork/agiledao](https://gitee.com/ideaswork/agiledao)
 - Bilibili: [https://space.bilibili.com/28249524](https://space.bilibili.com/28249524)
 - Zhihu: [https://www.zhihu.com/people/wang-qing-gang-41](https://www.zhihu.com/people/wang-qing-gang-41)
