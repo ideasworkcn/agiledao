@@ -6,9 +6,9 @@ spring:
       enabled: true
       additional-paths: src/main/java
   datasource:
-    url: ${DATABASE_URL}
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
+    url: ${DATABASE_URL:jdbc:mysql://localhost:3306/agiledao?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
+    username: ${DATABASE_USERNAME:root}
+    password: ${DATABASE_PASSWORD:agiledao}
 
     driver-class-name: com.mysql.cj.jdbc.Driver
 

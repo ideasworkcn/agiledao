@@ -15,6 +15,7 @@ else
     echo "Node.js is already installed."
 fi
 
+MYSQL_ROOT_PASSWORD="agiledao"
 # Check if MySQL is installed
 if ! command -v mysql &> /dev/null
 then
@@ -24,7 +25,6 @@ then
     sudo systemctl enable mysql
     
     # Set MySQL root password and secure the installation
-    MYSQL_ROOT_PASSWORD="agiledao"
     sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER 'root'@'%' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';"
     sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;"
     sudo mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';"
