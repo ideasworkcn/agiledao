@@ -8,6 +8,7 @@ import com.ideaswork.scrum.domain.userstory.feature.FeatureService;
 import com.ideaswork.scrum.infrastructure.utils.IdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,7 @@ public class EpicServiceImpl implements EpicService {
     }
 
     @Override
+    @Transactional
     public Epic save(Epic epic) {
         String productId = epic.getProductId();
         String number = epicRepository.findMaxNumber(productId);
@@ -48,11 +50,12 @@ public class EpicServiceImpl implements EpicService {
 //        }
 //        epic.setPx(maxPx + 1);
         // Find all epics with px greater than the current px
-        List<Epic> epicsToUpdate = epicRepository.findByPxGreaterThan(epic.getPx());
+        List<Epic> epicsToUpdate = epicRepository.findByPxGreaterThan(epic.getPx()-1);
 
         // Increment the px value for each epic
         for (Epic epicDB : epicsToUpdate) {
             epicDB.setPx(epicDB.getPx() + 1);
+            System.out.println(epicDB);
         }
 
         // Save the updated epics back to the repository

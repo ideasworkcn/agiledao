@@ -125,13 +125,16 @@ export default function SprintManagement() {
     <>
       <Header />
       <div className="bg-white">
-      <div className="container ">
-      <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 flex flex-wrap items-center px-2 py-4 sm:py-6">
+      <div className="container">
+      <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800  flex flex-wrap items-center px-2 py-8 sm:py-8">
+        
+        <div className="border-b-2 border-blue-300">
         <span className="text-blue-600 break-all">{product?.name || "当前产品"}</span>
         <span className="mx-2 hidden sm:inline">·</span>
         <span className="w-full sm:w-auto mt-2 sm:mt-0">迭代计划</span>
+        </div>
       </h1>
-      <div className="flex min-h-screen w-full flex-col bg-muted/40">
+      <div className="flex min-h-screen w-full flex-col bg-muted/40 border border-gray-100 ">
         <div className="flex flex-1 flex-col md:flex-row w-full bg-white rounded-lg mb-4">
           <History
             sprintList={sprintList}
@@ -142,25 +145,33 @@ export default function SprintManagement() {
             className="w-full md:w-64 lg:w-72 mb-4 md:mb-0"
           />
           <main className="flex-1 p-4 md:p-6">
-            <div className="grid gap-4 md:gap-6">
-              <SprintInfo
-                product={product}
-                sprint={sprint}
-                deleteSprintById={deleteSprintById}
-                updateSprintById={updateSprintById}
-                saveSprint={saveSprintContent}
-                className="w-full"
-              />
-              <SprintBacklog
-                sprint={sprint}
-                backlogList={backlogList}
-                sprintBacklogList={sprintBacklogList}
-                setSprintBacklogList={setSprintBacklogList}
-                setBacklogList={setBacklogList}
-                removeBacklogFromSprint={removeBacklogFromSprint}
-                className="w-full"
-              />
-            </div>
+          <div className="grid gap-4 md:gap-6">
+            {!sprint.id && sprintList.length === 0 ? (
+              <div className="text-center text-gray-500">
+                请选择或创建一个 Sprint
+              </div>
+            ) : (
+              <>
+                <SprintInfo
+                  product={product}
+                  sprint={sprintList.length > 0 ? sprintList[0] : sprint}
+                  deleteSprintById={deleteSprintById}
+                  updateSprintById={updateSprintById}
+                  saveSprint={saveSprintContent}
+                  className="w-full"
+                />
+                <SprintBacklog
+                  sprint={sprintList.length > 0 ? sprintList[0] : sprint}
+                  backlogList={backlogList}
+                  sprintBacklogList={sprintBacklogList}
+                  setSprintBacklogList={setSprintBacklogList}
+                  setBacklogList={setBacklogList}
+                  removeBacklogFromSprint={removeBacklogFromSprint}
+                  className="w-full"
+                />
+              </>
+            )}
+          </div>
           </main>
         </div>
       </div>
@@ -275,6 +286,7 @@ function SprintBacklog({
         // 对 res 结果按照 优先级降序排列
         res.sort((a, b) => b.importance - a.importance);
         setBacklogList(res);
+        toast({ title: "移除成功", status: "success" });
       });
     });
   };
@@ -322,7 +334,13 @@ function SprintBacklog({
                   {row.howToDemo}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                  <span className={
+                    `px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      row.status === "已完成" ? "bg-green-100 text-green-800" :
+                      row.status === "进行中" ? "bg-yellow-100 text-yellow-800" :
+                      row.status === "计划中" ? "bg-blue-100 text-blue-800" : ""
+                    }`
+                  }>
                     {row.status}
                   </span>
                 </td>

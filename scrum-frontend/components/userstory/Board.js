@@ -154,16 +154,18 @@ const Board = ({ columns, setColumns, product }) => {
     }
   };
 
-  const addColumn = ({columnId}) => {
-    const columnIndex = columns.findIndex((column) => column.id === columnId);
+  const addColumn = ( columnId ) => {
+    // console.log(columnId)
+    const columnIndex = columns.length > 0 ? columns.findIndex((column) => column.id === columnId) : -1;
+    // console.log(columnIndex)
     const newColumn = {
       id: null,
       name: `Epic Story ${columns.length + 1}`,
       number: "",
       productId: productId,
-      px: columnIndex  // Corrected px assignment
+      px: columnIndex + 1 // Corrected px assignment
     };
-
+  
     addEpic(newColumn).then((data) => {
       console.log(data);
       const updatedColumns = columns.map((column, index) => ({
@@ -172,9 +174,8 @@ const Board = ({ columns, setColumns, product }) => {
       }));
       const newColumnWithId = { ...newColumn, id: data.id }; // Ensure newColumn has the ID from the response
       updatedColumns.splice(columnIndex + 1, 0, newColumnWithId);
-      setColumns(updatedColumns);
+      setColumns([...updatedColumns]); // Ensure state is updated with new columns array
     });
-
   };
 
   const deleteColumn = (columnId) => {
@@ -187,16 +188,16 @@ const Board = ({ columns, setColumns, product }) => {
 
   const addCard = (columnId) => {
     const itemCount = columns.reduce(
-      (total, column) => total + column.features.length,
+      (total, column) => total + (column.features?.length || 0),
       0
     );
-    const newCardId = `feature-${itemCount + 1}`;
+    const newCardId = `Feature-${itemCount + 1}`;
     const newCard = {
       id: newCardId,
       number: null,
       productId: productId,
       epicId: columnId,
-      content: `feature ${itemCount + 1}`,
+      content: `Feature ${itemCount + 1}`,
       backlogs: [],
     };
     addFeature(newCard).then((data) => {
@@ -204,7 +205,7 @@ const Board = ({ columns, setColumns, product }) => {
       setColumns(
         columns.map((column) =>
           column.id === columnId
-            ? { ...column, features: [...column.features, data] }
+            ? { ...column, features:  [...(column.features ?? []), data] }
             : column
         )
       );
@@ -381,15 +382,17 @@ const Board = ({ columns, setColumns, product }) => {
       </Droppable>
      
     </DragDropContext>
-      {/* <button
-        className="mt-4 w-36 min-w-36 bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center"
-        onClick={addColumn}
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-        </svg>
-        Add Epic
-      </button> */}
+    {columns.length === 0 && (
+      <button
+      className="mt-4 w-40 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center"
+      onClick={() => addColumn({ columnId: null })} // 传递 null 作为 columnId
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+      </svg>
+      Add Epic
+    </button>
+    )}
     </>
   );
 };
