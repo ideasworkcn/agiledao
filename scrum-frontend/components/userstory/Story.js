@@ -42,7 +42,7 @@ const Story = ({ story, index, onStoryContentChange, deleteStory }) => {
                   }}
                   className="w-full text-left text-sm text-red-600 hover:text-red-700 transition-colors duration-150"
                 >
-                  Delete
+                  Delete Story
                 </button>
               </DropdownMenuItem>
             </DropdownMenuContent>

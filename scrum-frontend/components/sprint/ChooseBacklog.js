@@ -21,6 +21,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/components/ui/use-toast";
 
 function ChooseBacklog({
   sprint,
@@ -32,6 +33,7 @@ function ChooseBacklog({
   addBacklogToSprint,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
+  const { toast } = useToast();
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -56,6 +58,8 @@ function ChooseBacklog({
         // 按照优先级降序、
         res.sort((a, b) => b.importance - a.importance);
         setBacklogList(res);
+        
+        toast({ title: "添加成功", status: "success" });
       });
     });
   };
@@ -99,10 +103,17 @@ function ChooseBacklog({
                   <TableCell className="text-center">{row.importance}</TableCell>
                   <TableCell className="text-center">{row.initialEstimate}</TableCell>
                   <TableCell className="text-center">
-                    <Badge variant="secondary">{row.status}</Badge>
+                    <Badge className={
+                      row.status === "已完成" ? "bg-green-500" :
+                      row.status === "进行中" ? "bg-yellow-500" :
+                      row.status === "计划中" ? "bg-blue-500" : ""
+                    }>
+                      {row.status}
+                    </Badge>
                   </TableCell>
                   <TableCell className="text-center">
                     <Button
+                      className="bg-blue-500 hover:bg-blue-600 text-white"
                       variant="outline"
                       size="sm"
                       onClick={() =>

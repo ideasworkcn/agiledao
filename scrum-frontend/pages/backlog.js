@@ -117,10 +117,13 @@ const Backlog = () => {
     <div className="flex flex-col h-full min-h-screen bg-white">
       <Header />
       <main className="flex-grow container mx-auto px-6 py-8">
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 sm:mb-6 text-gray-800 flex flex-wrap items-center px-2">
+        <h1 className="text-xl sm:text-2xl md:text-3xl  font-semibold mb-4 sm:mb-6 text-gray-800 flex flex-wrap items-center px-2">
+          
+        <div className="border-b-2 border-blue-300">
           <span className="text-blue-600 mr-2">{productName}</span>
           <span className="hidden sm:inline mx-2">·</span>
           <span className="w-full sm:w-auto mt-2 sm:mt-0">产品待办列表</span>
+          </div>
         </h1>
         <div className="bg-gray-50 rounded-2xl shadow-sm py-4 mb-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-2">

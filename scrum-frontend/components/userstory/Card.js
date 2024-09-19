@@ -18,6 +18,8 @@ const Card = ({
   addStory,
   deleteStory,
   deleteCard,
+  addCard,
+  columnId
 }) => {
   return (
     <Draggable draggableId={item.id} index={index}>
@@ -26,7 +28,7 @@ const Card = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
-          className=" p-4 mb-4 rounded-lg shadow-md flex flex-col items-stretch mx-2 w-64 bg-blue-200"
+          className=" p-4 mb-4 rounded-lg shadow-md flex flex-col items-stretch mx-2 w-64 bg-blue-100"
           style={{ 
             ...provided.draggableProps.style,
             border: '1px solid #e2e8f0',
@@ -44,6 +46,14 @@ const Card = ({
                 <EllipsisVertical className="h-5 w-5 text-gray-500 hover:text-gray-700" />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
+              <DropdownMenuItem>
+                    <button
+                      className="w-full text-left text-sm text-blue-600"
+                      onClick={() => addCard(columnId)}
+                    >
+                      Add Feature
+                    </button>
+                  </DropdownMenuItem>
                 <DropdownMenuItem>
                   <button
                     onClick={() => {
@@ -51,7 +61,7 @@ const Card = ({
                     }}
                     className="w-full text-left text-sm text-red-600 hover:text-red-700 transition-colors duration-150"
                   >
-                    Delete
+                    Delete Feature
                   </button>
                 </DropdownMenuItem>
               </DropdownMenuContent>
