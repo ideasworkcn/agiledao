@@ -147,9 +147,10 @@ export default function SprintManagement() {
           <main className="flex-1 p-4 md:p-6">
           <div className="grid gap-4 md:gap-6">
             {!sprint.id && sprintList.length === 0 ? (
-              <div className="text-center text-gray-500">
-                请选择或创建一个 Sprint
-              </div>
+                  <div className="flex flex-col items-center justify-center h-full text-gray-500">
+                    <div className="text-2xl font-semibold mb-2">没有 Sprint</div>
+                    <p className="text-lg">请选择或创建一个 Sprint</p>
+                  </div>
             ) : (
               <>
                 <SprintInfo

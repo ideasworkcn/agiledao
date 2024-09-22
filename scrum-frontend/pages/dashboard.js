@@ -313,16 +313,16 @@ function SprintCard({ sprint, backlogList, taskList }) {
         </div>
  
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-          <div className="bg-gray-100 dark:bg-gray-700 p-4 sm:p-6 rounded-lg shadow-inner">
+          <div className="bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg shadow-inner">
             <div className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-200 mb-2 sm:mb-3">每日站会</div>
             <div className="text-base sm:text-lg text-gray-600 dark:text-gray-300">{sprint.dailyStandup}</div>
           </div>
-          <div className="bg-gray-100 dark:bg-gray-700 p-4 sm:p-6 rounded-lg shadow-inner">
+          <div className="bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg shadow-inner">
             <div className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-200 mb-2 sm:mb-3">Sprint 演示</div>
             <div className="text-base sm:text-lg text-gray-600 dark:text-gray-300">{sprint.sprintReview}</div>
           </div>
         </div>
-        <div className="bg-gray-100 dark:bg-gray-700 p-4 sm:p-6 rounded-lg shadow-inner">
+        <div className="bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg shadow-inner">
           <div className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-200 mb-2 sm:mb-3">Sprint 待办事项（预估）</div>
           <ul className="list-disc pl-4 sm:pl-6 text-gray-600 dark:text-gray-300 space-y-1 sm:space-y-2">
             {backlogList.map((backlog) => (
