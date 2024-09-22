@@ -197,14 +197,14 @@ function UsersCard({ userList, deleteUserById, openDialog, resetPassword }) {
                 <TableCell>
                   <Button
                     size="sm"
-                    className="mr-2 bg-blue-500 hover:bg-blue-600 text-white font-medium"
+                    className="mr-2 w-32 bg-blue-500 hover:bg-blue-600 text-white font-medium"
                     onClick={() => openDialog(user)}
                   >
                     Edit
                   </Button>
                   <Button
                     size="sm"
-                    className="mr-2 bg-yellow-500 hover:bg-yellow-600 text-white font-medium"
+                    className="mr-2 w-32 bg-blue-500 hover:bg-blue-600 text-white font-medium"
                     onClick={() => resetPassword(user)}
                   >
                     Reset Password
@@ -212,7 +212,7 @@ function UsersCard({ userList, deleteUserById, openDialog, resetPassword }) {
                   <Button
                     size="sm"
                     variant="secondary"
-                    className="bg-red-500 hover:bg-red-600 text-white font-medium"
+                    className="bg-gray-200 w-32 text-black hover:bg-gray-300 hover:text-red-600 font-medium"
                     onClick={() => {
                       if (window.confirm("确定要删除这个 User 吗？")) {
                         deleteUserById(user);
@@ -340,9 +340,9 @@ function RolesCard() {
                 方法。
               </TableCell>
               <TableCell>
-                <Badge variant="outline" className="mr-1 bg-gray-100 text-gray-800">管理冲刺</Badge>
-                <Badge variant="outline" className="mr-1 bg-gray-100 text-gray-800">清除障碍</Badge>
-                <Badge variant="outline" className="bg-gray-100 text-gray-800">主持会议</Badge>
+                <Badge variant="outline" className="mr-1 bg-white text-gray-800 text-lg p-1 px-2">管理冲刺</Badge>
+                <Badge variant="outline" className="mr-1 bg-white text-gray-800 text-lg p-1 px-2">清除障碍</Badge>
+                <Badge variant="outline" className="bg-white text-gray-800 text-lg p-1 px-2">主持会议</Badge>
               </TableCell>
             </TableRow>
             <TableRow>
@@ -351,9 +351,9 @@ function RolesCard() {
                 负责定义产品愿景，管理产品待办事项，确保团队理解并执行产品目标。
               </TableCell>
               <TableCell>
-                <Badge variant="outline" className="mr-1 bg-gray-100 text-gray-800">管理产品待办事项</Badge>
-                <Badge variant="outline" className="mr-1 bg-gray-100 text-gray-800">优先处理功能</Badge>
-                <Badge variant="outline" className="bg-gray-100 text-gray-800">代表利益相关者</Badge>
+                <Badge variant="outline" className="mr-1 bg-white text-gray-800 text-lg p-1 px-2">管理产品待办事项</Badge>
+                <Badge variant="outline" className="mr-1 bg-white text-gray-800 text-lg p-1 px-2">优先处理功能</Badge>
+                <Badge variant="outline" className="bg-white text-gray-800 text-lg p-1 px-2">代表利益相关者</Badge>
               </TableCell>
             </TableRow>
             <TableRow>
@@ -362,9 +362,9 @@ function RolesCard() {
                 负责将产品待办事项转化为工作中的软件增量，包括软件开发人员、测试人员和设计师。
               </TableCell>
               <TableCell>
-                <Badge variant="outline" className="mr-1 bg-gray-100 text-gray-800">估算任务</Badge>
-                <Badge variant="outline" className="mr-1 bg-gray-100 text-gray-800">实现功能</Badge>
-                <Badge variant="outline" className="bg-gray-100 text-gray-800">执行测试</Badge>
+                <Badge variant="outline" className="mr-1 bg-white text-gray-800 text-lg p-1 px-2">估算任务</Badge>
+                <Badge variant="outline" className="mr-1 bg-white text-gray-800 text-lg p-1 px-2">实现功能</Badge>
+                <Badge variant="outline" className="bg-white text-gray-800 text-lg p-1 px-2">执行测试</Badge>
               </TableCell>
             </TableRow>
           </TableBody>
