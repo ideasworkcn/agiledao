@@ -11,11 +11,14 @@ import {
 } from "@/api/task.api";
 import { getUsers } from "@/api/user.api";
 import moment from "moment";
+import { toast } from "@/components/ui/use-toast";
+
 export default function TaskBoard({
   backlog,
   sprint,
   setShowModal,
   setSelectedTask,
+  setBacklogList
 }) {
   const [currentBacklog, setCurrentBacklog] = useState(backlog);
   const [editingTask, setEditingTask] = useState({ id: "" });
@@ -107,6 +110,11 @@ export default function TaskBoard({
       getBacklogTaskListBySprintIdAndBacklogId(sprint.id, backlog.id).then(
         (res) => {
           setCurrentBacklog(updatedBacklog);
+          setBacklogList((prevBacklogList) =>
+            prevBacklogList.map((b) =>
+              b.id === backlog.id ? updatedBacklog : b
+            )
+          );
         }
       );
     });
@@ -116,6 +124,14 @@ export default function TaskBoard({
     console.log("Source Droppable ID:", sourceDroppableId);
     console.log("Destination Droppable ID:", destinationDroppableId);
     console.log("Final Updated Task List:", finalUpdatedTaskList);
+
+
+    // 显示 toast 提示
+    toast({
+      title: "任务更新成功",
+      status: "success",
+    });
+
   };
 
   // 添加新任务

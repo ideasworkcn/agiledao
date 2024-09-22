@@ -51,6 +51,7 @@ export default function Task() {
   const [selectedTaskHours, setSelectedTaskHours] = useState([]);
   const [product, setProduct] = useState({});
 
+
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("token");
     if (!isLoggedIn) {
@@ -98,16 +99,48 @@ export default function Task() {
     fetchTaskHours();
   }, [selectedTask]);
 
-  const handleTaskHoursSave = async () => {
-    try {
-      const updatedHours = await updateTaskHours(selectedTaskHours);
-      setSelectedTaskHours(updatedHours);
-      setShowModal(false);
-      toast({ title: "Task hours updated successfully", status: "success" });
-    } catch (error) {
-      console.error("Error updating task hours:", error);
-      toast({ title: "Failed to update task hours", status: "error" });
-    }
+  const handleTaskHoursSave = () => {
+    updateTaskHours(selectedTaskHours)
+      .then((updatedHours) => {
+        setSelectedTaskHours(updatedHours);
+       
+        setShowModal(false);
+        toast({ title: "Task hours updated successfully", status: "success" });
+
+      //   const totalHours = updatedHours.reduce((total, hour) => total + hour.hours, 0);
+      //   setSelectedTask((prevTask) => ({
+      //     ...prevTask,
+      //     hours: totalHours,
+      //   }));
+      //         // Debugging information
+      // console.log("Selected Task:", selectedTask);
+      // console.log("Updated Hours:", updatedHours);
+      // console.log("Total Hours:", totalHours);
+
+      //   setBacklogList((prevBacklogList) =>
+      //     prevBacklogList.map((backlog) =>
+      //       backlog.id === selectedTask.backlogId
+      //         ? {
+      //             ...backlog,
+      //             taskList: backlog.taskList.map((task) =>
+      //               task.id === selectedTask.id
+      //                 ? { ...task, hours: totalHours }
+      //                 : task
+      //             ),
+      //           }
+      //         : backlog
+      //     )
+      //   );
+      //  getSprintBacklogsAndTasks(sprint.id).then((updatedBacklogs)=>{
+      //     setBacklogList([...updatedBacklogs]);
+      //  })
+          console.log("backlogList:",backlogList)
+
+      })
+      .catch((error) => {
+        console.error("Error updating task hours:", error);
+        toast({ title: "Failed to update task hours", status: "error" });
+      });
   };
 
   const finishBacklog = async (backlog) => {
@@ -133,6 +166,13 @@ export default function Task() {
       console.error("Error changing sprint:", error);
       toast({ title: "Failed to load sprint data", status: "error" });
     }
+  };
+
+  const calculateCompletionPercentage = (taskList) => {
+    const totalTasks = taskList.length;
+    if (totalTasks === 0) return 0; // Prevent NaN by returning 0 if there are no tasks
+    const completedTasks = taskList.filter(task => task.status === "done").length;
+    return Math.round((completedTasks / totalTasks) * 100);
   };
 
   return (
@@ -181,59 +221,69 @@ export default function Task() {
         </header>
         <main className="flex-1 py-4 sm:py-6 px-2 sm:px-4 lg:px-8">
           <Accordion type="single" collapsible className="space-y-2 sm:space-y-4">
-            {backlogList.map((backlog) => (
-              <AccordionItem
-                key={backlog.id}
-                value={backlog.id}
-                className="bg-white rounded-lg shadow"
-              >
-                <AccordionTrigger className="px-3 sm:px-4 py-2 sm:py-3 hover:bg-gray-50">
-                  <div className="flex flex-col lg:flex-row w-full text-left items-start justify-between">
-                    <div className="flex flex-col sm:flex-row lg:flex-row space-y-2 sm:space-y-0 lg:space-y-0 sm:space-x-4 lg:space-x-6 flex-grow">
-                      <div className="flex items-center justify-start w-full sm:w-auto">
-                        <div className="font-medium text-gray-700 text-sm sm:text-base">
-                          {backlog.number}
+            {backlogList.length > 0 ? (
+              backlogList.map((backlog) => (
+                <AccordionItem
+                  key={backlog.id}
+                  value={backlog.id}
+                  className="bg-white rounded-lg shadow"
+                >
+                  <AccordionTrigger className="px-3 sm:px-4 py-2 sm:py-3 hover:bg-gray-50">
+                    <div className="flex flex-col lg:flex-row w-full text-left items-start justify-between">
+                      <div className="flex flex-col sm:flex-row lg:flex-row space-y-2 sm:space-y-0 lg:space-y-0 sm:space-x-4 lg:space-x-6 flex-grow">
+                        <div className="flex items-center justify-start w-full sm:w-auto">
+                          <div className="font-medium text-gray-700 text-sm sm:text-base">
+                            {backlog.number}
+                          </div>
+                          <span className="text-xs sm:text-sm font-medium px-2 py-1 rounded-full bg-blue-100 text-blue-700 ml-2">
+                            {backlog.status}
+                          </span>
                         </div>
-                        <span className="text-xs sm:text-sm font-medium px-2 py-1 rounded-full bg-blue-100 text-blue-700 ml-2">
-                          {backlog.status}
-                        </span>
-                      </div>
-                      <div className="text-sm sm:text-base font-semibold text-gray-900 break-words flex-grow text-left">
-                        {backlog.name}
-                      </div>
-                      <div className="flex items-center gap-2 justify-start">
-                        {/* <div className="text-xs sm:text-sm text-gray-600">完成情况：</div> */}
-                        <div className="text-xs sm:text-sm font-medium text-blue-600 px-2">
-                          {calculateProgress(backlog.taskList)}%
+                        <div className="text-sm sm:text-base font-semibold text-gray-900 break-words flex-grow text-left">
+                          {backlog.name}
                         </div>
+                        <div className="flex items-center gap-2 justify-start">
+                          {/* <div className="text-xs sm:text-sm text-gray-600">完成情况：</div> */}
+                          <div className={`mr-8 text-xs sm:text-sm font-medium text-white px-3 py-1 rounded-full ${getProgressColor( calculateCompletionPercentage(backlog.taskList))} shadow-md`}>
+                            {/* {calculateProgress(backlog.taskList)}% */}
+                            {/* {completionPercentage}%、 */}
+                            {calculateCompletionPercentage(backlog.taskList)}%
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-3 lg:mt-0 w-full sm:w-auto">
+                      <a
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            finishBacklog(backlog);
+                          }}
+                          className="bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-200 text-xs w-full sm:w-auto inline-block text-center py-2 px-4 rounded"
+                        >
+                          完成 Backlog
+                        </a>
                       </div>
                     </div>
-                    <div className="mt-3 lg:mt-0 w-full sm:w-auto">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          finishBacklog(backlog);
-                        }}
-                        className="bg-green-500 text-white hover:bg-green-600 transition-colors duration-200 text-xs w-full sm:w-auto"
-                      >
-                        完成 Backlog
-                      </Button>
-                    </div>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="px-3 sm:px-4 py-2 sm:py-3 bg-gray-50 rounded-b-lg">
-                  <TaskBoard
-                    sprint={sprint}
-                    backlog={backlog}
-                    setShowModal={setShowModal}
-                    setSelectedTask={setSelectedTask}
-                    className="w-full"
-                  />
-                </AccordionContent>
-              </AccordionItem>
-            ))}
+                  </AccordionTrigger>
+                  <AccordionContent className="px-3 sm:px-4 py-2 sm:py-3 bg-gray-50 rounded-b-lg">
+                    <TaskBoard
+                      sprint={sprint}
+                      backlog={backlog}
+                      setShowModal={setShowModal}
+                      setSelectedTask={setSelectedTask}
+                      setBacklogList={setBacklogList}
+                      className="w-full"
+                    />
+                  </AccordionContent>
+                </AccordionItem>
+              ))
+            ) : (
+              <div className="text-center text-gray-500 py-10">
+              <p className="text-lg font-semibold">暂无 Backlog 数据</p>
+              <p className="text-sm">请添加新的 Backlog 或检查筛选条件</p>
+            </div>
+            )}
           </Accordion>
         </main>
         <EditableTable
@@ -253,11 +303,18 @@ export default function Task() {
   );
 }
 
-function calculateProgress(taskList) {
-  if (!taskList || taskList.length === 0) return 0;
-  const completedTasks = taskList.filter(task => task.status === "done").length;
-  return Math.round((completedTasks / taskList.length) * 100);
+function getProgressColor(progress) {
+  if (progress === 100) return "bg-green-500";
+  if (progress >= 75) return "bg-blue-500";
+  if (progress >= 50) return "bg-yellow-500";
+  return "bg-red-500";
 }
+
+// function calculateProgress(taskList) {
+//   if (!taskList || taskList.length === 0) return 0;
+//   const completedTasks = taskList.filter(task => task.status === "done").length;
+//   return Math.round((completedTasks / taskList.length) * 100);
+// }
 
 function EditableTable({
   selectedTaskHours,
