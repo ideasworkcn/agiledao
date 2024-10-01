@@ -44,8 +44,10 @@ export default function SprintManagement() {
     goal: "",
     startDate: "",
     endDate: "",
+    demoDate:"",
     dailyStandup: "",
     sprintReview: "",
+    status:""
   });
   const [sprintList, setSprintList] = useState([]);
   const [backlogList, setBacklogList] = useState([]);
@@ -82,6 +84,7 @@ export default function SprintManagement() {
   const getSprintById = (id) => {
     getSprintDetail(id).then((res) => {
       setSprint(res);
+      console.log(res)
       getSprintBacklogList(id).then((res) => {
         setSprintBacklogList(res);
       });
@@ -101,6 +104,7 @@ export default function SprintManagement() {
 
   const updateSprintById = (data) => {
     // toast({ title: "保存成功", status: "success" });
+    console.log(data)
     setSprint(data);
   };
 
@@ -108,6 +112,9 @@ export default function SprintManagement() {
     updateSprint(sprint).then((res) => {
       console.log(res);
       toast({ title: "保存成功", status: "success" });
+      getSprints(productId).then((res) => {
+        setSprintList(res);
+      });
     });
   };
 
@@ -155,7 +162,8 @@ export default function SprintManagement() {
               <>
                 <SprintInfo
                   product={product}
-                  sprint={sprintList.length > 0 ? sprintList[0] : sprint}
+                  sprint={sprint}
+                  setSprint={setSprint}
                   deleteSprintById={deleteSprintById}
                   updateSprintById={updateSprintById}
                   saveSprint={saveSprintContent}
@@ -186,9 +194,9 @@ export default function SprintManagement() {
 function SprintInfo({
   sprint,
   deleteSprintById,
-  updateSprintById,
+  setSprint,
+  // updateSprintById,
   saveSprint,
-  product,
 }) {
   return (
     <div className="space-y-6">
@@ -198,7 +206,7 @@ function SprintInfo({
             className="outline-none border-none focus:outline-none px-0 text-gray-900 text-2xl font-semibold w-full min-w-fit"
             type="text"
             onChange={(e) =>
-              updateSprintById({ ...sprint, name: e.target.value })
+              setSprint({ ...sprint, name: e.target.value })
             }
             placeholder="Sprint Name"
             value={sprint.name || ""}
@@ -230,7 +238,7 @@ function SprintInfo({
       <Input
         className="outline-none border-none focus:outline-none px-0 text-lg w-full"
         type="text"
-        onChange={(e) => updateSprintById({ ...sprint, goal: e.target.value })}
+        onChange={(e) => setSprint({ ...sprint, goal: e.target.value })}
         placeholder="Sprint 目标"
         value={sprint.goal || ""}
       />
@@ -260,7 +268,7 @@ function SprintInfo({
               placeholder={placeholder}
               value={sprint[key] || ""}
               onChange={(e) =>
-                updateSprintById({ ...sprint, [key]: e.target.value })
+                setSprint({ ...sprint, [key]: e.target.value })
               }
             />
           </div>
