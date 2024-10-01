@@ -44,6 +44,8 @@ public class Sprint {
     private Date endDate;
 
     @Column(name = "demo_date")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "演示日期", example = "2022-02-01")
     private Date demoDate;
 

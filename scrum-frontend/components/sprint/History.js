@@ -3,7 +3,7 @@
 
 import React from "react";
 
-function History({ sprintList, getSprintById, productId, createSprint, product }) {
+function History({ sprintList, getSprintById, productId, createSprint }) {
   return (
     <aside className="w-full md:w-64 lg:w-72 shrink-0 border-r bg-white rounded-lg">
       <div className="flex h-full flex-col p-4">
