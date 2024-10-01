@@ -230,7 +230,7 @@ const Board = ({ columns, setColumns, product }) => {
       return (
         count +
         column.features.reduce((itemCount, item) => {
-          return itemCount + item.backlogs.length;
+          return itemCount + + (item.backlogs?.length || 0); 
         }, 0)
       );
     }, 0);
@@ -257,7 +257,7 @@ const Board = ({ columns, setColumns, product }) => {
             item.id === cardId
               ? {
                   ...item,
-                  backlogs: [...item.backlogs, data],
+                  backlogs: [...(item.backlogs ?? []), data],
                 }
               : item
           ),

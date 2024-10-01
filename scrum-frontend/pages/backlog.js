@@ -17,7 +17,8 @@ import {
   getFeatureListByProductId,
 } from "@/api/backlog.api";
 import { toast } from "@/components/ui/use-toast";
-import EditableDataGrid from "@/components/EditableDataGrid";
+// import EditableDataGrid from "@/components/EditableDataGrid";
+import EditableDataGrid from "@/components/backlog/EditableDataGrid";
 
 const columns = [
   { key: "number", name: "编号", width: 100 },
@@ -67,17 +68,22 @@ const Backlog = () => {
   const [filterStatus, setFilterStatus] = useState("");
   const [filterFeature, setFilterFeature] = useState("");
   const [statusList, setStatusList] = useState(["计划中", "进行中", "已完成"]);
-
+  const [productId, setProductId] = useState("");
   useEffect(() => {
-    let product = JSON.parse(localStorage.getItem("currentWorkspace"));
-    let productId = product.id;
+    const product = JSON.parse(localStorage.getItem("currentWorkspace"));
+    const currentProductId = product?.id;
+    
+    if (currentProductId) {
+      setProductId(currentProductId);
 
-    getBacklogListByProductId(productId).then((data) => {
-      setRows(data);
-    });
-    getFeatureListByProductId(productId).then((data) => {
-      setFeatures(data);
-    });
+      getBacklogListByProductId(currentProductId).then((data) => {
+        setRows(data);
+      });
+      
+      getFeatureListByProductId(currentProductId).then((data) => {
+        setFeatures(data);
+      });
+    }
   }, []);
 
   const handleRowsChange = (newRows, data) => {
@@ -85,6 +91,9 @@ const Backlog = () => {
       for (let i = 0; i < data.indexes.length; i++) {
         updateBacklog(newRows[data.indexes[i]]).then(() => {
           toast({ title: "保存成功", status: "success" });
+          getBacklogListByProductId(productId).then((data) => {
+            setRows(data);
+          });
         });
       }
     } else {
@@ -92,18 +101,19 @@ const Backlog = () => {
       console.error("Invalid data structure in handleRowsChange");
       toast({ title: "保存失败", status: "error" });
     }
-    setRows(newRows);
-  };
 
+  };
+  
   const filteredRows = rows.filter((row) => {
     return (
-      row.number.includes(filterId) &&
-      row.name.toLowerCase().includes(filterName.toLowerCase()) &&
-      row.howToDemo.toLowerCase().includes(filterHowToDemo.toLowerCase()) &&
-      (filterFeature === "all" || row.featureId.includes(filterFeature)) &&
-      (filterStatus === "all" || row.status.toLowerCase().includes(filterStatus.toLowerCase()))
+      (filterId === "" || row.number.includes(filterId)) &&
+      (filterName === "" || row.name.toLowerCase().includes(filterName.toLowerCase())) &&
+      (filterHowToDemo === "" || row.howToDemo.toLowerCase().includes(filterHowToDemo.toLowerCase())) &&
+      (filterFeature === "all" || filterFeature === "" || row.featureId === filterFeature) &&
+      (filterStatus === "all" || filterStatus === "" || row.status === filterStatus)
     );
   });
+
   const [productName, setProductName] = useState("当前产品");
 
   useEffect(() => {
@@ -189,6 +199,7 @@ const Backlog = () => {
             headerRowHeight={48}
             rowHeight={52}
           />
+
         </div>
       </main>
       <Footer />
