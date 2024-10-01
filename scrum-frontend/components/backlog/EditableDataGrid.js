@@ -42,42 +42,64 @@ const EditableDataGrid = ({ columns, rows, onRowsChange }) => {
   };
 
   return (
-    <table className="w-full">
-      <thead>
-        <tr>
-          {columns.map((col) => (
-            <th
-              key={col.key}
-              style={{ width: col.width, cursor: 'pointer' }}
-              onClick={() => handleSort(col.key)}
-            >
-              {col.name} {sortConfig.key === col.key ? (sortConfig.direction === 'asc' ? '↑' : '↓') : ''}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {sortedRows.map((row, rowIndex) => (
-          <tr key={rowIndex}>
+    <div className="overflow-x-auto">
+      <table className="w-full">
+        <thead className="bg-gray-100">
+          <tr>
             {columns.map((col) => (
-              <td key={col.key} style={{ width: col.width }}>
-                {col.editable ? (
-                  <input
-                    type="text"
-                    value={inputValues[`${rowIndex}-${col.key}`] ?? row[col.key]}
-                    onChange={(e) => handleInputChange(rowIndex, col.key, e.target.value)}
-                    onBlur={() => handleInputBlur(rowIndex, col.key)}
-                    className="w-full border border-gray-300 rounded px-2 py-1"
-                  />
-                ) : (
-                  row[col.key]
-                )}
-              </td>
+              <th
+                key={col.key}
+                className={`cursor-pointer text-left py-3 px-4 font-semibold text-gray-700 border-b border-gray-200 ${
+                  col.key === 'number' || col.key === 'name' || col.key === 'status' || col.key === 'importance'
+                    ? ''
+                    : 'hidden md:table-cell'
+                }`}
+                style={{ width: col.width }}
+                onClick={() => handleSort(col.key)}
+              >
+                <div className="flex items-center justify-between">
+                  <span>{col.name}</span>
+                  {sortConfig.key === col.key && (
+                    <span className="ml-1">
+                      {sortConfig.direction === 'asc' ? '↑' : '↓'}
+                    </span>
+                  )}
+                </div>
+              </th>
             ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {sortedRows.map((row, rowIndex) => (
+            <tr key={rowIndex} className="hover:bg-gray-50 transition-colors duration-150">
+              {columns.map((col) => (
+                <td
+                  key={col.key}
+                  className={`py-3 px-4 ${
+                    col.key === 'number' || col.key === 'name' || col.key === 'status' ||  col.key === 'importance'
+                      ? ''
+                      : 'hidden md:table-cell'
+                  }`}
+                  style={{ width: col.width }}
+                >
+                  {col.editable ? (
+                    <input
+                      type="text"
+                      value={inputValues[`${rowIndex}-${col.key}`] ?? row[col.key]}
+                      onChange={(e) => handleInputChange(rowIndex, col.key, e.target.value)}
+                      onBlur={() => handleInputBlur(rowIndex, col.key)}
+                      className="w-full bg-transparent border-b border-gray-200 focus:border-blue-500 focus:outline-none transition-colors duration-200 py-1"
+                    />
+                  ) : (
+                    <span className="text-gray-700">{row[col.key]}</span>
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

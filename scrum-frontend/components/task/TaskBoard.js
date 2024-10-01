@@ -12,15 +12,18 @@ import {
 import { getUsers } from "@/api/user.api";
 import moment from "moment";
 import { toast } from "@/components/ui/use-toast";
+import { useMemo } from "react";
 
 export default function TaskBoard({
   backlog,
   sprint,
   setShowModal,
   setSelectedTask,
-  setBacklogList
+  setBacklogList,
+  currentBacklog,
+  setCurrentBacklog
 }) {
-  const [currentBacklog, setCurrentBacklog] = useState(backlog);
+  setCurrentBacklog(backlog)
   const [editingTask, setEditingTask] = useState({ id: "" });
   const [userList, setUserList] = useState([]);
   useEffect(() => {
@@ -29,14 +32,20 @@ export default function TaskBoard({
     });
   }, []);
 
-  const filterTasksByStatus = (status) => {
-    // 检查currentBacklog和currentBacklog.taskList是否存在且是数组
-    if (currentBacklog && Array.isArray(currentBacklog.taskList)) {
-      return currentBacklog.taskList.filter((task) => task.status === status);
-    }
-    // 如果currentBacklog.taskList不存在或不是数组，返回空数组
-    return [];
-  };
+  const filteredTasks = useMemo(() => {
+    const filterTasksByStatus = (status) => {
+      if (currentBacklog && Array.isArray(currentBacklog.taskList)) {
+        return currentBacklog.taskList.filter((task) => task.status === status);
+      }
+      return [];
+    };
+
+    return {
+      todo: filterTasksByStatus("todo"),
+      inprogress: filterTasksByStatus("inprogress"),
+      done: filterTasksByStatus("done"),
+    };
+  }, [currentBacklog.taskList]);
   // 拖拽结束时的回调函数
   const onDragEnd = (result) => {
     const { source, destination, draggableId } = result;
@@ -152,12 +161,15 @@ export default function TaskBoard({
       startTime: "",
       endTime: "",
     };
+
+
     addTaskToSprint(newTask).then((task) => {
       getBacklogTaskListBySprintIdAndBacklogId(
         sprint.id,
         task.productBacklogId
       ).then((res) => {
         console.log(res);
+        toast({ title: "保存成功", status: "success" });
         setCurrentBacklog(res);
       });
     });
@@ -206,6 +218,7 @@ export default function TaskBoard({
           (res) => {
             setEditingTask({ id: "" });
             setCurrentBacklog(res);
+            toast({ title: "保存成功", status: "success" });
           }
         );
       });
@@ -257,7 +270,7 @@ export default function TaskBoard({
                 {status === "done" && <CheckIcon className="mr-2 h-5 w-5" />}
                 {status.charAt(0).toUpperCase() + status.slice(1)}
               </h2>
-                {filterTasksByStatus(status).map((task, index) => (
+                {filteredTasks[status].map((task, index) => (
                   <Draggable key={task.id} draggableId={task.id} index={index}>
                     {(provided) => (
                       <div
@@ -407,7 +420,9 @@ export default function TaskBoard({
           </Droppable>
         ))}
       </div>
+      
     </DragDropContext>
+    
   );
 }
 

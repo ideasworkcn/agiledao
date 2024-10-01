@@ -11,6 +11,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { PlusIcon } from "lucide-react";
 
 import {
+  getBacklogTaskListBySprintIdAndBacklogId,
   getSprintBacklogsAndTasks,
   getTaskHours,
   updateTaskHours,
@@ -28,6 +29,7 @@ import {
   DialogTitle,
   DialogClose,
 } from "@/components/ui/dialog";
+import TaskHoursTable from "@/components/task/TaskHoursTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -50,6 +52,7 @@ export default function Task() {
   const [selectedTask, setSelectedTask] = useState(null);
   const [selectedTaskHours, setSelectedTaskHours] = useState([]);
   const [product, setProduct] = useState({});
+  const [currentBacklog,setCurrentBacklog] = useState({})
 
 
   useEffect(() => {
@@ -107,34 +110,16 @@ export default function Task() {
         setShowModal(false);
         toast({ title: "Task hours updated successfully", status: "success" });
 
-      //   const totalHours = updatedHours.reduce((total, hour) => total + hour.hours, 0);
-      //   setSelectedTask((prevTask) => ({
-      //     ...prevTask,
-      //     hours: totalHours,
-      //   }));
-      //         // Debugging information
-      // console.log("Selected Task:", selectedTask);
-      // console.log("Updated Hours:", updatedHours);
-      // console.log("Total Hours:", totalHours);
-
-      //   setBacklogList((prevBacklogList) =>
-      //     prevBacklogList.map((backlog) =>
-      //       backlog.id === selectedTask.backlogId
-      //         ? {
-      //             ...backlog,
-      //             taskList: backlog.taskList.map((task) =>
-      //               task.id === selectedTask.id
-      //                 ? { ...task, hours: totalHours }
-      //                 : task
-      //             ),
-      //           }
-      //         : backlog
-      //     )
-      //   );
-      //  getSprintBacklogsAndTasks(sprint.id).then((updatedBacklogs)=>{
-      //     setBacklogList([...updatedBacklogs]);
-      //  })
-          console.log("backlogList:",backlogList)
+        getBacklogTaskListBySprintIdAndBacklogId(sprint.id, selectedTask.productBacklogId).then(
+          (res) => {
+            setCurrentBacklog(res);
+            setBacklogList((prevBacklogList) =>
+              prevBacklogList.map((b) =>
+                b.id === selectedTask.productBacklogId ? { ...b, ...res } : b
+              )
+            );
+          }
+        );
 
       })
       .catch((error) => {
@@ -272,6 +257,8 @@ export default function Task() {
                       backlog={backlog}
                       setShowModal={setShowModal}
                       setSelectedTask={setSelectedTask}
+                      currentBacklog={currentBacklog}
+                      setCurrentBacklog={setCurrentBacklog}
                       setBacklogList={setBacklogList}
                       className="w-full"
                     />
@@ -286,8 +273,7 @@ export default function Task() {
             )}
           </Accordion>
         </main>
-        <EditableTable
-          className="w-full"
+        <TaskHoursTable
           selectedTaskHours={selectedTaskHours}
           setSelectedTaskHours={setSelectedTaskHours}
           sprint={sprint}
@@ -316,106 +302,6 @@ function getProgressColor(progress) {
 //   return Math.round((completedTasks / taskList.length) * 100);
 // }
 
-function EditableTable({
-  selectedTaskHours,
-  setSelectedTaskHours,
-  sprint,
-  selectedTask,
-  showModal,
-  setShowModal,
-  handleTaskHoursSave,
-}) {
-  const handleAddRow = () => {
-    const newTaskHour = {
-      id: "",
-      note: "",
-      productId: sprint.productId,
-      sprintId: sprint.id,
-      taskId: selectedTask.id,
-      memberId: selectedTask.memberId,
-      assigner: selectedTask.assigner,
-      createTime: "",
-      hours: 0,
-    };
-    setSelectedTaskHours([...selectedTaskHours, newTaskHour]);
-  };
-
-  const handleChange = (index, field, value) => {
-    const updatedHours = selectedTaskHours.map((hour, i) =>
-      i === index ? { ...hour, [field]: value } : hour
-    );
-    setSelectedTaskHours(updatedHours);
-  };
-
-  return (
-    <Dialog open={showModal} onOpenChange={setShowModal}>
-      <DialogContent className="w-[1000px] max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">
-            {selectedTask ? "任务工时" : "任务工时"}
-          </DialogTitle>
-          <DialogDescription className="text-gray-600">
-            编辑工时信息并保存更改
-          </DialogDescription>
-        </DialogHeader>
-        <div className="space-y-6">
-          <div className="bg-gray-50 p-4 rounded-lg">
-            {selectedTaskHours.map((row, index) => (
-              <div
-                key={index}
-                className="flex flex-row items-center justify-between mb-4 bg-white p-1 rounded-md shadow-sm"
-              >
-                <input
-                  className="w-3/5 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  type="text"
-                  placeholder="工作说明"
-                  value={row.note}
-                  onChange={(e) => handleChange(index, "note", e.target.value)}
-                />
-                <div className="flex items-center w-1/5 ">
-                  <input
-                    className="flex-1 w-16 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="number"
-                    placeholder="用时"
-                    value={row.hours}
-                    onChange={(e) =>
-                      handleChange(index, "hours", e.target.value)
-                    }
-                  />
-                  <span className="ml-2 text-gray-600">h</span>
-                </div>
-                <Label className="w-1/5 ml-2 text-gray-600">
-                  {row.createTime}
-                </Label>
-              </div>
-            ))}
-            <Button
-              onClick={handleAddRow}
-              variant="outline"
-              className="mt-4 w-full flex items-center justify-center"
-            >
-              <PlusIcon className="w-4 h-4 mr-2" />
-              添加新行
-            </Button>
-          </div>
-        </div>
-        <div className="flex justify-end gap-4 mt-6">
-          <DialogClose asChild>
-            <Button variant="outline" onClick={() => setShowModal(false)}>
-              取消
-            </Button>
-          </DialogClose>
-          <Button
-            onClick={handleTaskHoursSave}
-            className="bg-blue-600 hover:bg-blue-700"
-          >
-            保存
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
-}
 
 function KanbanIcon(props) {
   return (

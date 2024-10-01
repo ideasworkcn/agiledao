@@ -96,8 +96,9 @@ export default function SprintManagement() {
       toast({ title: "删除成功", status: "success" });
       getSprints(productId).then((res) => {
         setSprintList(res);
-
-        getSprintById(res[0].id);
+        if (res.length > 0) {
+          getSprintById(res[0].id);
+        } 
       });
     });
   };
@@ -105,7 +106,17 @@ export default function SprintManagement() {
   const updateSprintById = (data) => {
     // toast({ title: "保存成功", status: "success" });
     console.log(data)
-    setSprint(data);
+    setSprint({ 
+      id: "",
+      name: "",
+      goal: "",
+      startDate: "",
+      endDate: "",
+      demoDate:"",
+      dailyStandup: "",
+      sprintReview: "",
+      status:""}
+    );
   };
 
   const saveSprintContent = () => {
@@ -153,7 +164,7 @@ export default function SprintManagement() {
           />
           <main className="flex-1 p-4 md:p-6">
           <div className="grid gap-4 md:gap-6">
-            {!sprint.id && sprintList.length === 0 ? (
+            {!sprint.id || sprintList.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-gray-500">
                     <div className="text-2xl font-semibold mb-2">没有 Sprint</div>
                     <p className="text-lg">请选择或创建一个 Sprint</p>
