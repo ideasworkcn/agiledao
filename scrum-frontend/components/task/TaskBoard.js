@@ -23,7 +23,10 @@ export default function TaskBoard({
   currentBacklog,
   setCurrentBacklog
 }) {
-  setCurrentBacklog(backlog)
+  useEffect(() => {
+    setCurrentBacklog(backlog);
+  }, [backlog, setCurrentBacklog]);
+
   const [editingTask, setEditingTask] = useState({ id: "" });
   const [userList, setUserList] = useState([]);
   useEffect(() => {
@@ -31,6 +34,13 @@ export default function TaskBoard({
       setUserList(res);
     });
   }, []);
+
+  const filterTasksByStatus = (status) => {
+    if (currentBacklog && Array.isArray(currentBacklog.taskList)) {
+      return currentBacklog.taskList.filter((task) => task.status === status);
+    }
+    return [];
+  };
 
   const filteredTasks = useMemo(() => {
     const filterTasksByStatus = (status) => {
@@ -171,6 +181,11 @@ export default function TaskBoard({
         console.log(res);
         toast({ title: "保存成功", status: "success" });
         setCurrentBacklog(res);
+        setBacklogList((prevBacklogList) =>
+          prevBacklogList.map((b) =>
+            b.id === backlog.id ? res : b
+          )
+        );
       });
     });
   };
