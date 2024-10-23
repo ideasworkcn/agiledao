@@ -289,6 +289,8 @@ export default function Task() {
   );
 }
 
+
+
 function getProgressColor(progress) {
   if (progress === 100) return "bg-green-500";
   if (progress >= 75) return "bg-blue-500";
