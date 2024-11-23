@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ScrumApplication {
 
     public static void main(String[] args){
-        // Load .env file
+//        // Load .env file
 //        Dotenv dotenv = Dotenv.configure().load();
 //
 //        // Apply environment variables to system properties
