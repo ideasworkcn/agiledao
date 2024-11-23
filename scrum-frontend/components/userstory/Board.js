@@ -216,10 +216,14 @@ const Board = ({ columns, setColumns, product }) => {
     deleteFeature(cardId).then((res) => {
       console.log(res);
       setColumns(
-        columns.map((column) => ({
-          ...column,
-          features: column.features.filter((item) => item.id !== cardId),
-        }))
+        columns.map((column) => {
+          const updatedFeatures = column.features.filter((item) => item.id !== cardId);
+          // 如果 features 为空，可以选择返回一个默认值或处理逻辑
+          return {
+            ...column,
+            features: updatedFeatures.length > 0 ? updatedFeatures : [], // 确保 features 不为 null
+          };
+        })
       );
     });
   };
@@ -229,9 +233,9 @@ const Board = ({ columns, setColumns, product }) => {
     const allStoriesCount = columns.reduce((count, column) => {
       return (
         count +
-        column.features.reduce((itemCount, item) => {
-          return itemCount + + (item.backlogs?.length || 0); 
-        }, 0)
+        (column.features?.reduce((itemCount, item) => {
+          return itemCount + (item.backlogs?.length || 0); 
+        }, 0) || 0) // 确保 itemCount 不为 undefined
       );
     }, 0);
 

@@ -25,9 +25,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <Header />
-        <div className="w-full">{children}</div>
+        <div className="w-full ">{children}</div>
         <Toaster />
-        <Footer />
+        
       </body>
     </html>
   );

@@ -123,8 +123,9 @@ export default function UserManagement() {
 
   return (
     <>
+    <div className="flex flex-col min-h-screen ">
       <Header />
-      <div className="flex min-h-screen w-full flex-col bg-white">
+      <div className="container py-8 flex-grow flex flex-col bg-white">
         <div className="container mx-auto px-4 py-8">
           <main className="space-y-6">
             <Tabs defaultValue="users" className="w-full">
@@ -137,7 +138,7 @@ export default function UserManagement() {
                   onClick={() => openDialog()}
                   className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition duration-300 ease-in-out"
                 >
-                  Add User
+                  添加用户
                 </Button>
               </div>
               <TabsContent value="users">
@@ -163,6 +164,7 @@ export default function UserManagement() {
       </div>
       <Footer />
       <Toaster />
+      </div>
     </>
   );
 }
@@ -200,14 +202,14 @@ function UsersCard({ userList, deleteUserById, openDialog, resetPassword }) {
                     className="mr-2 w-32 bg-blue-500 hover:bg-blue-600 text-white font-medium"
                     onClick={() => openDialog(user)}
                   >
-                    Edit
+                    编辑
                   </Button>
                   <Button
                     size="sm"
                     className="mr-2 w-32 bg-blue-500 hover:bg-blue-600 text-white font-medium"
                     onClick={() => resetPassword(user)}
                   >
-                    Reset Password
+                    重设密码
                   </Button>
                   <Button
                     size="sm"
@@ -219,7 +221,7 @@ function UsersCard({ userList, deleteUserById, openDialog, resetPassword }) {
                       }
                     }}
                   >
-                    Delete
+                    删除
                   </Button>
                 </TableCell>
               </TableRow>
@@ -265,7 +267,7 @@ function UserDialog({ isOpen, onClose, onSave, user }) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white rounded-lg shadow-lg">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">{user ? "Edit User" : "Add User"}</DialogTitle>
+          <DialogTitle className="text-xl font-semibold">{user ? "编辑用户" : "添加用户"}</DialogTitle>
           <DialogDescription className="text-gray-500">
             {user
               ? "Edit the user's details below."
@@ -303,10 +305,10 @@ function UserDialog({ isOpen, onClose, onSave, user }) {
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={onClose} className="mr-2">
-            Cancel
+            取消
           </Button>
           <Button onClick={handleSubmit} className="bg-blue-500 hover:bg-blue-600 text-white font-medium">
-            {user ? "Save Changes" : "Add User"}
+            {user ? "保存用户" : "添加用户"}
           </Button>
         </DialogFooter>
       </DialogContent>
