@@ -133,9 +133,9 @@ export default function Component() {
 
   return (
     <>
+    <div className="flex flex-col min-h-screen ">
       <Header />
-      <div className="bg-white ">
-      <div className=" container py-8 ">
+      <div className="container py-8 flex-grow flex flex-col">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-gray-800">产品管理</h1>
           <Button onClick={openCreateModal} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">创建产品</Button>
@@ -316,9 +316,9 @@ export default function Component() {
           </DialogContent>
         </Dialog>
       </div>
-      </div>
       <Footer />
       <Toaster />
+      </div>
     </>
   );
   

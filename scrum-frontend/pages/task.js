@@ -162,8 +162,9 @@ export default function Task() {
 
   return (
     <>
+    <div className="flex flex-col min-h-screen ">
       <Header />
-      <div className="flex flex-col h-full  min-h-screen bg-white">
+      <div className="flex-grow flex flex-col py-8 bg-white">
         <header className="bg-white shadow-sm">
           <div className="max-w-7xl py-4 px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0 lg:space-x-4">
@@ -285,6 +286,7 @@ export default function Task() {
       </div>
       <Footer />
       <Toaster />
+    </div>
     </>
   );
 }
