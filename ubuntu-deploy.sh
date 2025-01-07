@@ -56,6 +56,8 @@ fi
 
 # Allow MySQL remote access
 sudo sed -i "s/bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
+sudo chown -R mysql:mysql /var/lib/mysql
+sudo chmod -R 755 /var/lib/mysql
 sudo systemctl restart mysql
 
 # Allow MySQL port through firewall
@@ -153,6 +155,9 @@ echo "Repository updated and project set up successfully!"
 
 # Start backend service
 cd ../scrum-service
+sudo lsof -i :8080
+# Find and kill any existing processes on port 8080
+fuser -k 8080/tcp
 nohup sudo java -jar scrum-0.0.1-SNAPSHOT.jar \
     --spring.datasource.url="jdbc:mysql://localhost:3306/agiledao?useSSL=false&serverTimezone=UTC" \
     --spring.datasource.username=root \

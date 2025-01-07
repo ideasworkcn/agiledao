@@ -8,11 +8,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ScrumApplication {
 
     public static void main(String[] args){
-//        // Load .env file
-//        Dotenv dotenv = Dotenv.configure().load();
-//
-//        // Apply environment variables to system properties
-//        dotenv.entries().forEach(entry -> System.setProperty(entry.getKey(), entry.getValue()));
+        // Load .env file
+        Dotenv dotenv = Dotenv.configure().load();
+
+        // Apply environment variables to system properties
+        dotenv.entries().forEach(entry -> System.setProperty(entry.getKey(), entry.getValue()));
 
         SpringApplication.run(ScrumApplication.class, args);
     }

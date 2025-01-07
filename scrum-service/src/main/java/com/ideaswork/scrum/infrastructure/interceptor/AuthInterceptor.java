@@ -23,20 +23,26 @@ public class AuthInterceptor implements HandlerInterceptor {
     // Override preHandle method to intercept requests before they are handled by the controller
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // Add code to check for token and authenticate user
-        String token = request.getHeader("Authorization");
-        System.out.println("token: " + token);
-//        if (token == null || !token.startsWith("Bearer ")) {
-        if (token == null ) {
-            // 未登录自定义异常
-            throw new UnauthorizedException("Unauthorized");
-        }
-        // veryfiy token
-        if (token.startsWith("Bearer ")){
-            token = token.substring(7);
-        }
-        if (!userService.checkToken(token)) {
-            throw new UnauthorizedException("Unauthorized");
+        // Check if the request path starts with "/v1"
+        String path = request.getRequestURI();
+        if (path.startsWith("/v1")) {
+            // Add code to check for token and authenticate user
+            String token = request.getHeader("Authorization");
+            System.out.println("token: " + token);
+
+            if (token == null) {
+                // 未登录自定义异常
+                throw new UnauthorizedException("Unauthorized");
+            }
+
+            // Verify token
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+
+            if (!userService.checkToken(token)) {
+                throw new UnauthorizedException("Unauthorized");
+            }
         }
         return true; // Return true to allow the request to proceed to the controller
     }

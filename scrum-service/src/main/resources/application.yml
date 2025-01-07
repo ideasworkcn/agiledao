@@ -6,6 +6,7 @@ spring:
       enabled: true
       additional-paths: src/main/java
   datasource:
+    schema: classpath:schema.sql
     url: ${DATABASE_URL:jdbc:mysql://localhost:3306/agiledao?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
     username: ${DATABASE_USERNAME:root}
     password: ${DATABASE_PASSWORD:agiledao}
@@ -13,9 +14,12 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
-    hibernate:
-      dialect: org.hibernate.dialect.MySQL8Dialect
-      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        hbm2ddl:
+          auto: update
+
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
