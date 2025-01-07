@@ -1,0 +1,157 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String  @id
+  email      String @unique
+  password   String?   // 添加密码字段
+  name       String?
+  position   String?
+  role       String?  //添加角色字段
+  created_at String?
+  status     String?
+  assigned_tasks Task[] @relation("TaskAssigner")  // 作为任务分配者
+  member_tasks   Task[] @relation("TaskMember")    // 作为任务执行者
+}
+
+model Product {
+  id          String  @id @default(uuid())
+  name        String?
+  description String?
+  manager     String?
+  start_date  String?
+  due_date    String?
+  status      String?
+  userstories UserStory[]
+}
+
+model Epic {
+  id         String    @id @default(uuid())
+  product_id String?
+  name       String?
+  px         Int?
+  features   Feature[]
+
+  @@index([product_id])
+  @@index([px])
+}
+
+model Feature {
+  id          String      @id @default(uuid())
+  name        String?
+  px          Int?
+  epic_id     String?
+  epic        Epic?       @relation(fields: [epic_id], references: [id])
+  userstories UserStory[]
+
+  @@index([epic_id])
+  @@index([px])
+  @@index([epic_id, px])
+}
+
+model UserStory {
+  id         String   @id @default(uuid())
+  number     Int?     
+  name       String?
+  importance Int?
+  estimate   Int?
+  howtodemo  String?
+  px         Int?
+  fzr        String?
+  status     String?
+  feature_id String?
+  product_id String?
+  tasks      Task[]
+  feature    Feature? @relation(fields: [feature_id], references: [id])
+  product    Product?   @relation(fields: [product_id], references: [id])
+  sprint_user_stories SprintUserStory[]
+
+  @@index([feature_id])
+  @@index([px])
+  @@index([status])
+  @@index([fzr])
+  @@index([feature_id, px])
+}
+
+model Sprint {
+  id                String  @id @default(uuid())
+  product_id        String?
+  name              String?
+  goal              String?
+  start_date        String?
+  end_date          String?
+  demo_date         String?
+  estimate_velocity Int?
+  actual_velocity   Int?
+  daily_standup     String?
+  sprint_review     String?
+  status            String?
+  sprint_user_stories SprintUserStory[]
+}
+
+model SprintUserStory {
+  id            String  @id @default(uuid())
+  user_story_id String
+  sprint_id     String
+  user_story     UserStory @relation(fields: [user_story_id], references: [id]) 
+  sprint        Sprint    @relation(fields: [sprint_id], references: [id])    
+  @@index([user_story_id])
+  @@index([sprint_id])
+  @@unique([user_story_id, sprint_id])
+}
+
+model Task {
+  id              String     @id @default(uuid())
+  name            String?
+  description     String?
+  product_id      String?
+  user_story_id   String?
+  sprint_id       String?
+  member_id       String?
+  assigner_id     String?
+  member          User?     @relation("TaskMember", fields: [member_id], references: [id])
+  assigner        User?     @relation("TaskAssigner", fields: [assigner_id], references: [id])
+  
+  px              Int?
+  estimated_hours Int?
+  hours           Int?
+  start_time      String?
+  end_time        String?
+  create_time     String?
+  status          String?
+  
+  user_story      UserStory? @relation(fields: [user_story_id], references: [id])
+  task_hours      TaskHour[]  // One-to-many relationship with TaskHour
+  
+  @@index([product_id])
+  @@index([user_story_id])
+  @@index([sprint_id])
+  @@index([member_id])
+  @@index([assigner_id])
+  @@index([status])
+}
+
+model TaskHour {
+  id          String   @id @default(uuid())
+  note        String?
+  product_id  String?
+  sprint_id   String?
+  task_id     String
+  member_id   String?
+  create_time String?
+  hours       Int?
+  
+  task        Task      @relation(fields: [task_id], references: [id])  // Many-to-one relationship with Task
+
+  @@index([product_id])
+  @@index([sprint_id])
+  @@index([task_id])
+  @@index([member_id])
+}
+
