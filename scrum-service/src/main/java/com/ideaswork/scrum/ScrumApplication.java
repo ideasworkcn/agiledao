@@ -13,6 +13,7 @@ public class ScrumApplication {
 
         // Apply environment variables to system properties
         dotenv.entries().forEach(entry -> System.setProperty(entry.getKey(), entry.getValue()));
+;
 
         SpringApplication.run(ScrumApplication.class, args);
     }
