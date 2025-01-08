@@ -39,6 +39,12 @@ export async function middleware(request: NextRequest) {
   const url = new URL(request.url)
   let path = url.pathname
 
+  // Fix IP nesting issue by removing duplicate IP segments
+  const ipSegments = path.split('/').filter(Boolean)
+  if (ipSegments.length > 1 && ipSegments[0] === ipSegments[1]) {
+    path = '/' + ipSegments.slice(1).join('/')
+  }
+
   // Normalize path by removing trailing slashes and duplicate slashes
   path = path.replace(/\/+/g, '/').replace(/\/$/, '') || '/'
 
