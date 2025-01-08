@@ -4,6 +4,8 @@ import prisma from '@/lib/db'
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 
+export const dynamic = 'force-dynamic' // Add this line to fix build error
+
 export async function POST(request: Request) {
   try {
     const { email, password } = await request.json()
