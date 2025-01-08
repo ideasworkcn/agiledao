@@ -26,7 +26,7 @@ export default function EditableText({ text, onTextChange, className }: Editable
       autoFocus
     />
   ) : (
-    <span onClick={() => setIsEditing(true)} className={`cursor-pointer ${className}`}>
+    <span onClick={() => setIsEditing(true)} className={`cursor-pointer ${className} `}>
       {text}
     </span>
   );

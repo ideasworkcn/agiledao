@@ -6,7 +6,9 @@
     "dev": "next dev  -p 3000",
     "build": "next build",
     "start": "next start  -p 80",
-    "lint": "next lint"
+    "lint": "next lint",
+    "migrate": "prisma migrate dev",
+    "studio": "prisma studio" 
   },
   "dependencies": {
     "@hello-pangea/dnd": "^17.0.0",

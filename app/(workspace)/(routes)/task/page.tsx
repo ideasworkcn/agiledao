@@ -89,7 +89,7 @@ export default function Task() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ ...backlog, status: "已完成" })
+          body: JSON.stringify({ ...backlog, status: "Done" })
         });
         
         const response = await fetch(`/api/sprint/userstory-task?sprint_id=${sprint.id}`);
@@ -183,7 +183,13 @@ export default function Task() {
                           <div className="font-medium text-gray-700 text-sm sm:text-base">
                             {backlog.number}
                           </div>
-                          <span className="text-xs sm:text-sm font-medium px-2 py-1 rounded-full bg-blue-100 text-blue-700 ml-2">
+                          <span className={`text-xs sm:text-sm font-medium px-2 py-1 rounded-full ml-2 ${
+                            backlog.status === 'In Progress' 
+                              ? 'bg-orange-100 text-orange-700'
+                              : backlog.status === 'Done'
+                              ? 'bg-green-100 text-green-700'
+                              : 'bg-blue-100 text-blue-700'
+                          }`}>
                             {backlog.status}
                           </span>
                         </div>

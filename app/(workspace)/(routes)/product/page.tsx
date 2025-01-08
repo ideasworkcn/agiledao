@@ -117,6 +117,12 @@ export default function ProductPage() {
   };
 
   const handleDeleteProject = (projectId: string) => {
+    const projectToDelete = projects.find(project => project.id === projectId);
+    if (!projectToDelete) return;
+
+    const confirmDelete = window.confirm(`确定要删除产品 "${projectToDelete.name}" 吗？此操作不可撤销。`);
+    if (!confirmDelete) return;
+
     fetch(`/api/product/${projectId}`, {
       method: 'DELETE',
     })
@@ -125,10 +131,17 @@ export default function ProductPage() {
       setProjects(projects.filter(project => project.id !== projectId));
       toast({
         title: "产品删除成功",
-        description: "产品已成功删除",
+        description: `产品 "${projectToDelete.name}" 已成功删除`,
       })
     })
-    .catch(error => console.error("Error deleting project:", error));
+    .catch(error => {
+      console.error("Error deleting project:", error);
+      toast({
+        title: "删除失败",
+        description: `删除产品 "${projectToDelete.name}" 时出错`,
+        variant: "destructive"
+      })
+    });
   };
 
   const filteredProjects = projects.filter(project => {

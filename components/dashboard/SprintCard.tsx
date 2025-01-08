@@ -17,9 +17,9 @@ export default function SprintCard({ sprint, backlogList, taskList }: SprintCard
       : 0;
     return (
       <Card className="col-span-full lg:col-span-4 bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <CardHeader className="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700">
+        <CardHeader className="border-b border-gray-200 dark:border-gray-700 bg-white gdark:bg-gray-700">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0">
-            <CardTitle className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">{sprint.name}</CardTitle>
+            <CardTitle className="text-xl sm:text-2xl font-bold  text-gray-800 dark:text-gray-100">{sprint.name}</CardTitle>
             <div className="text-sm sm:text-base font-medium text-gray-500 dark:text-gray-400">
               <time dateTime={sprint.start_date}>{moment(sprint.start_date).format('YYYY-MM-DD')}</time>
               {' '}-{' '}
@@ -28,7 +28,7 @@ export default function SprintCard({ sprint, backlogList, taskList }: SprintCard
           </div>
         </CardHeader>
         <CardContent className="grid gap-4 sm:gap-6 p-4 sm:p-6">
-          <div className="bg-gradient-to-r from-blue-100 to-green-100 dark:from-blue-900 dark:to-green-900 p-4 sm:p-6 rounded-lg shadow-md">
+          <div className="bg-blue-100 dark:bg-blue-900 p-4 sm:p-6 rounded-lg shadow-md">
             <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-200 mb-2 sm:mb-3">Sprint 目标</h3>
             <div className="text-base sm:text-lg text-gray-700 dark:text-gray-300 italic">&ldquo;{sprint.goal}&rdquo;</div>
           </div>

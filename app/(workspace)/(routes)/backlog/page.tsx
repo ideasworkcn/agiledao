@@ -63,8 +63,8 @@ export default function Backlog() {
   const [rows, setRows] = useState<UserStory[]>([]);
   const [filterId, setFilterId] = useState("");
   const [filterName, setFilterName] = useState("");
-  const [filterFeature, setFilterFeature] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
+  const [filterFeature, setFilterFeature] = useState("all");
+  const [filterStatus, setFilterStatus] = useState("all");
   const [statusList] = useState(["To Do", "In Progress", "Done"]);
   const [featureList, setFeatureList] = useState<Feature[]>([]);
   const [product, setProduct] = useState({name:""});
@@ -130,7 +130,12 @@ export default function Backlog() {
         });
       })).then(() => {
         toast({ title: "保存成功" });
-        setRows(newRows);
+        // Update the original rows array instead of filtered rows
+        const updatedRows = rows.map(row => {
+          const updatedRow = newRows.find(r => r.id === row.id);
+          return updatedRow || row;
+        });
+        setRows(updatedRows);
       }).catch(error => {
         console.error("Error updating user stories:", error);
         toast({ title: "保存失败", variant: "destructive" });
@@ -142,8 +147,8 @@ export default function Backlog() {
     return (
       (filterId === "" || row.number?.toString().includes(filterId)) &&
       (filterName === "" || row.name.toLowerCase().includes(filterName.toLowerCase())) &&
-      (filterFeature === "" || filterFeature === "all" || row.feature?.id === filterFeature) &&
-      (filterStatus === "all" || filterStatus === "" || row.status === filterStatus)
+      (filterFeature === "all" || row.feature?.id === filterFeature) &&
+      (filterStatus === "all" || row.status === filterStatus)
     );
   });
 

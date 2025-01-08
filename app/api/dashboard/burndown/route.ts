@@ -28,8 +28,8 @@ export async function GET(request: Request) {
       where: { 
         sprint_id: sprintId,
         create_time: {
-          gte: start_date as string,
-          lte: end_date as string
+          gte: `${start_date as string} 00:00:01`,
+          lte: `${end_date as string} 23:59:59`
         }
       },
       select: { create_time: true, estimated_hours: true }
