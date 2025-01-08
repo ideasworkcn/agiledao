@@ -6,16 +6,6 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import "@/app/globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
 
 export const metadata: Metadata = {
   title: "敏捷之道 - 极简敏捷开发管理工具",
@@ -34,7 +24,7 @@ export default function RootLayout({
    
     <html lang="en" >
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased w-full`}
+        className={`antialiased w-full`}
         suppressHydrationWarning
       >
            <div className="flex flex-col h-screen w-full">
