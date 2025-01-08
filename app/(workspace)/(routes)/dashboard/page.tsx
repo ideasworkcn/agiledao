@@ -15,7 +15,7 @@ import BarChart from '@/components/dashboard/BarChart'
 import { VelocityItem, WorkLoadItem } from "@/types/Model";
 
 
-import { useState, useEffect,memo } from "react";
+import { useState, useEffect } from "react";
 
 // import { getSprintBacklogsAndTasks } from "@/api/task.api";
 import { Product, Sprint, UserStory, Task,BurndownItem } from "@/types/Model";
@@ -37,7 +37,7 @@ export default function Dashboard() {
 
   useEffect(() => {
 
-    let currentProduct = localStorage.getItem("currentProduct");
+    const currentProduct = localStorage.getItem("currentProduct");
     if (currentProduct) {
       setProduct(JSON.parse(currentProduct));
     }
@@ -115,7 +115,10 @@ export default function Dashboard() {
               setBurndownChartData(realBurndownData);
 
               // 计算理想燃尽图
-              const idealBurndownData = calculateIdealBurndown(burndown);
+              const idealBurndownData = calculateIdealBurndown(burndown).map(item => ({
+                x: new Date(item.x).getTime(), 
+                y: item.y
+              }));
               setIdealBurndownData(idealBurndownData);
             })
             .catch(error => {
@@ -144,11 +147,11 @@ export default function Dashboard() {
     }
   }, [currentSprint]);
 
-  const calculateIdealBurndown = (burndown:any) => {
-    let idealBurndownData = [];
+  const calculateIdealBurndown = (burndown:BurndownItem[]) => {
+    const idealBurndownData = [];
     let remaining = burndown[0].remainingHours;
-    let totalDays = burndown.length;
-    let dailyBurn = remaining / totalDays;
+    const totalDays = burndown.length;
+    const dailyBurn = remaining / totalDays;
     for (let i = 0; i < totalDays; i++) {
       idealBurndownData.push({
         x: burndown[i].date,

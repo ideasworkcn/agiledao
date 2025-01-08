@@ -13,7 +13,6 @@ export default function AdminPage() {
   const [workItems, setWorkItems] = useState<TaskHourTableItem[]>([]);
   const [filteredItems, setFilteredItems] = useState<TaskHourTableItem[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     // Get user role once when component mounts
@@ -63,8 +62,8 @@ export default function AdminPage() {
 
   const handleSearch = (params: URLSearchParams) => {
     const user_id = params.get('user_id');
-    let start_date = params.get('start_date');
-    let end_date = params.get('end_date');
+    const start_date = params.get('start_date');
+    const end_date = params.get('end_date');
 
     const filtered = workItems.filter(item => {
       const itemDate = moment(item.create_time);
@@ -114,7 +113,7 @@ export default function AdminPage() {
           onSearch={handleSearch} 
           onExport={handleExport}
         />
-        <StatisticsView workItems={filteredItems} isAdmin={isAdmin} />
+        <StatisticsView workItems={filteredItems}  />
       </div>
     </div>
   )

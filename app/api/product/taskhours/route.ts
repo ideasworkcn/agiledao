@@ -52,8 +52,12 @@ export const GET = async (req: NextRequest) => {
 
     return NextResponse.json(tableData);
   } catch (error) {
+    console.error('Failed to fetch product hierarchy:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch product hierarchy' },
+      { 
+        error: 'Failed to fetch product hierarchy',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }

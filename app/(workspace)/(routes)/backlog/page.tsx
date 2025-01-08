@@ -92,7 +92,7 @@ export default function Backlog() {
         
         // Extract unique features from user stories
         const featuresMap = new Map<string, Feature>();
-        data.forEach((story: any) => {
+        data.forEach((story: UserStory) => {
           if (story.feature && story.feature.id && story.feature.name) {
             featuresMap.set(story.feature.id, story.feature);
           }

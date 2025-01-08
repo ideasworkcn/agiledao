@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { useToast } from "@/hooks/use-toast";
 import type { DropResult } from "@hello-pangea/dnd";
-import type { Epic, Feature, UserStory, Product } from "@/types/Model";
+import type { Epic, UserStory, Product } from "@/types/Model";
 import EpicItem from "./EpicItem";
 import { Plus } from "lucide-react";
 

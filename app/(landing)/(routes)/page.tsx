@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { CheckCircle, Users, Zap, TrendingUp, Gauge, Clock } from 'lucide-react';
 import Link from 'next/link';
 

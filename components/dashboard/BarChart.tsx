@@ -49,10 +49,10 @@ const BarChart = memo(({ velocityData, height = 300 }: BarChartProps) => {
         role="application"
         ariaLabel="Sprint velocity chart"
         barAriaLabel={e => `${e.id}: ${e.formattedValue} in Sprint: ${e.indexValue}`}
-        tooltip={({ id, value, indexValue, data }) => (
+        tooltip={({  value, indexValue }) => (
           <div style={{ padding: 12, background: '#fff', border: '1px solid #ccc' }}>
             <strong>{indexValue}</strong><br />
-            所用时间: {value} h<br />
+            所用时间: {value}小时<br />
           </div>
         )}
       />

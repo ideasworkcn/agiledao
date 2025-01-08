@@ -18,8 +18,11 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Agiledao",
-  description: "Agiledao - A minimalist agile development management tool",
+  title: "敏捷之道 - 极简敏捷开发管理工具",
+  description: "敏捷之道 - 一个极简的敏捷开发管理工具，提供任务管理、工作日志、团队协作等功能，帮助团队高效实施敏捷开发。支持看板视图、任务跟踪、工时统计等功能，适用于Scrum和看板等多种敏捷方法。",
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({

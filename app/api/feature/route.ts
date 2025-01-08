@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const features = await prisma.feature.findMany();
     return NextResponse.json(features);

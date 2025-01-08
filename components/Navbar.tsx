@@ -12,6 +12,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useRouter } from 'next/navigation';
+import {
+    Map
+} from "lucide-react";
+
 
 const navMenu = [
   { href: "/", label: "Home" },
@@ -88,9 +92,9 @@ const Navbar = () => {
                     className="flex items-center gap-2 text-lg font-semibold md:text-base ml-2 md:ml-4"
                     prefetch={false}
                 >
-                    <img src="/favicon.ico" alt="AgileDao Logo" className="h-6 w-6 md:h-8 md:w-8 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-1 md:p-1.5 shadow-md hover:shadow-lg transition-shadow duration-300" />
+                    <Map className="h-6 w-6 md:h-8 md:w-8 text-black-500" />
                     <span className="hidden lg:inline w-32 text-gray-800 truncate">
-                        AgileDao
+                        敏捷之道
                     </span>
                 </Link>
                 {navMenu.map((item) => (

@@ -2,11 +2,11 @@
 
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { Button } from "../ui/button";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { TrashIcon ,PlusIcon, ListTodo, Activity, Check} from "lucide-react";
 import moment from "moment";
 import { Toaster } from "@/components/ui/toaster";
-import { toast, useToast } from "@/hooks/use-toast";
+import {  useToast } from "@/hooks/use-toast";
 import { useMemo } from "react";
 import { Task, User, Sprint, UserStory } from "@/types/Model";
 
@@ -490,7 +490,7 @@ export default function TaskBoard({
                               <textarea
                                 name="description"
                                 value={editingTask.description}
-                                onChange={(event)=>handleEditChange}
+                                onChange={()=>handleEditChange}
                                 onKeyDown={(event) => {
                                   if (event.key === 'Enter') {
                                     handleEditSave();

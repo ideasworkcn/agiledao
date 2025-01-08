@@ -93,7 +93,6 @@ export default function FeatureItem({
                     userstory={userstory}
                     feature={feature}
                     index={index}
-                    storyAdd={storyAdd}
                     storyUpdate={storyUpdate}
                     storyDelete={storyDelete}
                   />

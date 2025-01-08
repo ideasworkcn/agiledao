@@ -184,7 +184,7 @@ const EditableDataGrid: React.FC<EditableDataGridProps> = ({ columns, rows, onRo
         <tbody>
           {sortedRows.map((row, rowIndex) => (
             <tr key={rowIndex} className="hover:bg-gray-50 transition-colors duration-150">
-              {columns.map((col, colIndex) => (
+              {columns.map((col) => (
                 <td
                   key={col.key.toString()}
                   className={`py-3 px-4 ${
