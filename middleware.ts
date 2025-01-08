@@ -15,7 +15,8 @@ const publicPaths = Object.freeze([
   '/workspace',
   '/unauthorized',
   '/api/(.*)', // Match all API paths and subpaths using regex pattern
-  '/worklog/user'
+  '/worklog/user',
+  '/_next/static/(.*)', 
 ])
 
 const protectedRoutes = [
@@ -31,12 +32,21 @@ const protectedRoutes = [
   { path: '/userstory', roles: ['Product Owner', 'Scrum Master'] },
   { path: '/backlog', roles: ['Product Owner', 'Scrum Master'] },
   { path: '/worklog/admin', roles: ['Scrum Master'] },
-  
 ];
 
 export async function middleware(request: NextRequest) {
-  const path = request.nextUrl.pathname
-  const { pathname } = request.nextUrl;
+  // Get base path by removing domain and query parameters
+  const url = new URL(request.url)
+  let path = url.pathname
+
+  // Fix IP nesting issue by removing duplicate IP segments
+  const ipSegments = path.split('/').filter(Boolean)
+  if (ipSegments.length > 1 && ipSegments[0] === ipSegments[1]) {
+    path = '/' + ipSegments.slice(1).join('/')
+  }
+
+  // Normalize path by removing trailing slashes and duplicate slashes
+  path = path.replace(/\/+/g, '/').replace(/\/$/, '') || '/'
 
   console.log(`[Middleware] Request path: ${path}`)
 
@@ -51,10 +61,9 @@ export async function middleware(request: NextRequest) {
     return path === publicPath || path.startsWith(publicPath + '/')
   }
 
-
-  // 检查是否是静态资源路径
-  if (pathname.startsWith('/_next/static')) {
-    return NextResponse.next();
+  // Check if static resource path
+  if (path.startsWith('/_next/static')) {
+    return NextResponse.next()
   }
 
   // Allow public paths
@@ -74,13 +83,21 @@ export async function middleware(request: NextRequest) {
     console.log(`[Middleware] Token payload:`, payload)
   } catch (error) {
     console.error(`[Middleware] Token verification error:`, error)
-    return NextResponse.redirect(new URL('/login', request.url))
+    // Add redirect URL to prevent infinite redirects
+    if (!path.startsWith('/login')) {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+    return NextResponse.next()
   }
 
   // Redirect to login if not authenticated
   if (!payload) {
     console.log(`[Middleware] Unauthenticated request, redirecting to login`)
-    return NextResponse.redirect(new URL('/login', request.url))
+    // Add redirect URL to prevent infinite redirects
+    if (!path.startsWith('/login')) {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+    return NextResponse.next()
   }
 
   // Add user info to request headers
@@ -101,7 +118,11 @@ export async function middleware(request: NextRequest) {
   if (!isPathAllowed) {
     console.log(`[Middleware] Access denied for role ${payload.role} to path ${path}`)
     console.log(`Allowed paths for role ${payload.role}:`, allowedPaths)
-    return NextResponse.redirect(new URL('/unauthorized', request.url))
+    // Add redirect URL to prevent infinite redirects
+    if (!path.startsWith('/unauthorized')) {
+      return NextResponse.redirect(new URL('/unauthorized', request.url))
+    }
+    return NextResponse.next()
   }
 
   // Continue with authenticated request
