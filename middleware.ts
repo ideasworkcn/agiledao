@@ -39,24 +39,21 @@ export async function middleware(request: NextRequest) {
   const url = new URL(request.url)
   let path = url.pathname
 
-  // Fix IP nesting issue by removing duplicate IP segments
-  const ipSegments = path.split('/').filter(Boolean)
-  if (ipSegments.length > 1 && ipSegments[0] === ipSegments[1]) {
-    // Remove all duplicate IP segments, not just the first one
-    const uniqueSegments = ipSegments.filter((segment, index) => segment !== ipSegments[index + 1])
-    path = '/' + uniqueSegments.join('/')
+  // Enhanced IP nesting issue handling
+  const ipPattern = /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g
+  const ipMatches = path.match(ipPattern) || []
+  
+  // If multiple IPs found, remove all IP segments and keep the rest
+  if (ipMatches.length > 1) {
+    // Remove all IP address segments from path
+    path = path.split('/')
+      .filter(segment => !ipPattern.test(segment))
+      .join('/')
+    path = path || '/' // Ensure path is not empty
   }
 
   // Normalize path by removing trailing slashes and duplicate slashes
   path = path.replace(/\/+/g, '/').replace(/\/$/, '') || '/'
-
-  // Additional check for IP address in path
-  const ipPattern = /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/
-  if (ipPattern.test(path)) {
-    // Remove all IP address segments from path
-    path = path.split('/').filter(segment => !ipPattern.test(segment)).join('/')
-    path = path || '/' // Ensure path is not empty
-  }
 
   console.log(`[Middleware] Request path: ${path}`)
 
@@ -71,8 +68,8 @@ export async function middleware(request: NextRequest) {
     return path === publicPath || path.startsWith(publicPath + '/')
   }
 
-  // Check if static resource path
-  if (path.startsWith('/_next/static')) {
+  // Check if static resource path (considering possible IP prefix)
+  if (path.startsWith('/_next/static') || path.includes('/_next/static')) {
     return NextResponse.next()
   }
 
