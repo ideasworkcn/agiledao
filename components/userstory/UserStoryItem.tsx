@@ -10,7 +10,6 @@ interface UserStoryItemProps {
   feature: Feature;
   userstory: UserStory;
   index: number;
-  storyAdd: (featureId: string, story: any) => void;
   storyUpdate: (storyId: string, newContent: UserStory) => void;
   storyDelete: (storyId: string) => void;
 }
@@ -19,7 +18,6 @@ export default function UserStoryItem({
   feature,
   userstory,
   index,
-  storyAdd,
   storyUpdate,
   storyDelete
 }: UserStoryItemProps) {

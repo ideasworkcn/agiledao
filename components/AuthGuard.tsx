@@ -12,6 +12,7 @@ const AuthGuard = ({ children }: { children: React.ReactNode }) => {
                     throw new Error('Unauthorized');
                 }
             } catch (error) {
+                console.log("faild login:",error)
                 router.push('/login');
             }
         };

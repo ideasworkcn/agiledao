@@ -1,22 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import "@/app/globals.css";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast"
 import SprintInfo from "@/components/sprint/SprintInfo";
 import SprintBacklog from "@/components/sprint/SprintBacklog";
 
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from "@/components/ui/table";
 import History from "@/components/sprint/History";
-// import ChooseBacklog from "@/components/sprint/ChooseBacklog";
 import { Product,UserStory,Sprint } from "@/types/Model";
 
 

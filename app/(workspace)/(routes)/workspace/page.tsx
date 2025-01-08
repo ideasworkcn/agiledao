@@ -9,13 +9,24 @@ import { Map, ListTodo, TrendingUpIcon, CheckSquare, Users, BarChart2 , Briefcas
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from "@/components/ui/skeleton";
+import { Product } from "@/types/Model";
+
+interface MenuItem {
+  href: string;
+  title: string;
+  content: string;
+  icon: React.ElementType;
+  color: string;
+  roles: string[];
+}
+
 
 export default function Workspace() {
   const [products, setProducts] = React.useState([]);
   const router = useRouter();
-  const [currentProduct, setCurrentProduct] = useState<any>(null);
+  const [currentProduct, setCurrentProduct] = useState<Product>();
   const [userRole, setUserRole] = useState<string>('');
-  const [menuItems, setMenuItems] = useState<any[]>([]);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchUserData = async () => {

@@ -8,25 +8,13 @@ import {
 } from "@/components/ui/accordion";
 import "@/app/globals.css";
 import { Toaster } from "@/components/ui/toaster";
-import { PlusIcon, CheckSquare } from "lucide-react";
 
 import TaskBoard from "@/components/task/TaskBoard";
 import TaskHoursTable from "@/components/task/TaskHoursTable";
 
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogDescription,
-  DialogTitle,
-  DialogClose,
-} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { toast, useToast } from "@/hooks/use-toast";
-import type { Product, Task, TaskHour,UserStory } from '@/types/Model'
+import {  useToast } from "@/hooks/use-toast";
+import type { Product, Task,UserStory } from '@/types/Model'
 
 import {
   DropdownMenu,
@@ -34,7 +22,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import Router from "next/router";
 import { Sprint,User } from "@/types/Model";
 
 export default function Task() {

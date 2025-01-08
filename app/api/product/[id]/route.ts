@@ -13,7 +13,14 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch product' }, { status: 500 });
+    console.error('Failed to fetch product:', error);
+    return NextResponse.json(
+      { 
+        error: 'Failed to fetch product',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    );
   }
 }
 

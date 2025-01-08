@@ -1,101 +1,114 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { TaskHour, PrismaClient } from "@prisma/client";
+import { NextResponse } from "next/server";
+import { TaskHour } from "@/types/Model";
 import moment from "moment";
 import prisma from '@/lib/db';
 
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export async function GET(req: Request) {
   try {
-    if (req.method === "GET") {
-      const { task_id, member_id } = req.query;
-      
-      const taskHours = await prisma.taskHour.findMany({
-        where: {
-          task_id: task_id as string,
-          member_id: member_id as string,
-        },
-        include: {
-          task: true,
-        },
-        orderBy: {
-          create_time: "desc",
-        },
-      });
-
-      return res.status(200).json(taskHours);
+    const { searchParams } = new URL(req.url);
+    const task_id = searchParams.get('task_id');
+    const member_id = searchParams.get('member_id');
+    
+    if (!task_id || !member_id) {
+      return NextResponse.json({ message: "Missing required parameters" }, { status: 400 });
     }
 
-    if (req.method === "POST") {
-      const taskHourData = req.body as TaskHour;
-      
-      if (!taskHourData.hours) {
-        return res.status(400).json({ message: "Hours is required" });
-      }
+    const taskHours = await prisma.taskHour.findMany({
+      where: {
+        task_id,
+        member_id,
+      },
+      include: {
+        task: true,
+      },
+      orderBy: {
+        create_time: "desc",
+      },
+    });
 
-      const taskHour = await prisma.taskHour.create({
-        data: {
-          ...taskHourData,
-          create_time: moment().format("YYYY-MM-DD HH:mm:ss"),
-        },
-      });
-
-      // Update total hours in the related task
-      await prisma.task.update({
-        where: { id: taskHourData.task_id },
-        data: {
-          hours: {
-            increment: taskHourData.hours || 0
-          }
-        }
-      });
-
-      return res.status(201).json(taskHour);
-    }
-
-    if (req.method === "PUT") {
-      const taskHourData = req.body as TaskHour;
-      
-      if (!taskHourData.hours) {
-        return res.status(400).json({ message: "Hours is required" });
-      }
-
-      // Get the old hours value before update
-      const oldTaskHour = await prisma.taskHour.findUnique({
-        where: { id: taskHourData.id }
-      });
-
-      if (!oldTaskHour?.hours) {
-        return res.status(400).json({ message: "Invalid existing task hour record" });
-      }
-
-      const updatedTaskHour = await prisma.taskHour.update({
-        where: {
-          id: taskHourData.id,
-        },
-        data: taskHourData,
-      });
-
-      // Update total hours in the related task
-      const hoursDifference = (taskHourData.hours || 0) - (oldTaskHour.hours || 0);
-      await prisma.task.update({
-        where: { id: taskHourData.task_id },
-        data: {
-          hours: {
-            increment: hoursDifference
-          }
-        }
-      });
-
-      return res.status(200).json(updatedTaskHour);
-    }
-
-    return res.status(405).json({ message: "Method not allowed" });
+    return NextResponse.json(taskHours);
   } catch (error) {
-    console.error("Error in task hour API:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    console.error("Error in GET task hour API:", error);
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    const taskHourData = await req.json() as TaskHour;
+    
+    if (!taskHourData.hours) {
+      return NextResponse.json({ message: "Hours is required" }, { status: 400 });
+    }
+
+    const { task, ...dataWithoutTask } = taskHourData;
+
+    const taskHour = await prisma.taskHour.create({
+      data: {
+        ...dataWithoutTask,
+        create_time: moment().format("YYYY-MM-DD HH:mm:ss"),
+      },
+    });
+
+    await prisma.task.update({
+      where: { id: taskHourData.task_id },
+      data: {
+        hours: {
+          increment: taskHourData.hours || 0
+        }
+      }
+    });
+
+    return NextResponse.json(taskHour, { status: 201 });
+  } catch (error) {
+    console.error("Error in POST task hour API:", error);
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function PUT(req: Request) {
+  try {
+    const taskHourData = await req.json() as TaskHour;
+    
+    if (!taskHourData.hours) {
+      return NextResponse.json({ message: "Hours is required" }, { status: 400 });
+    }
+
+    const oldTaskHour = await prisma.taskHour.findUnique({
+      where: { id: taskHourData.id }
+    });
+
+    if (!oldTaskHour?.hours) {
+      return NextResponse.json({ message: "Invalid existing task hour record" }, { status: 400 });
+    }
+
+    const { task, ...dataWithoutTask } = taskHourData;
+
+    const updatedTaskHour = await prisma.taskHour.update({
+      where: {
+        id: taskHourData.id,
+      },
+      data: dataWithoutTask,
+    });
+
+    const hoursDifference = (taskHourData.hours || 0) - (oldTaskHour.hours || 0);
+    await prisma.task.update({
+      where: { id: taskHourData.task_id },
+      data: {
+        hours: {
+          increment: hoursDifference
+        }
+      }
+    });
+
+    return NextResponse.json(updatedTaskHour);
+  } catch (error) {
+    console.error("Error in PUT task hour API:", error);
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   } finally {
     await prisma.$disconnect();
   }

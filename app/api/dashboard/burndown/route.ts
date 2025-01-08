@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { Task, BurndownItem } from '@/types/Model';
+import {  BurndownItem } from '@/types/Model';
 import  db  from '@/lib/db';
 import moment from 'moment';
 
@@ -104,8 +104,12 @@ export async function GET(request: Request) {
 
     return NextResponse.json(burndownData);
   } catch (error) {
+    console.error('Error calculating burndown data:', error);
     return NextResponse.json(
-      { error: 'Failed to calculate burndown data' },
+      { 
+        error: 'Failed to calculate burndown data',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
