@@ -42,11 +42,21 @@ export async function middleware(request: NextRequest) {
   // Fix IP nesting issue by removing duplicate IP segments
   const ipSegments = path.split('/').filter(Boolean)
   if (ipSegments.length > 1 && ipSegments[0] === ipSegments[1]) {
-    path = '/' + ipSegments.slice(1).join('/')
+    // Remove all duplicate IP segments, not just the first one
+    const uniqueSegments = ipSegments.filter((segment, index) => segment !== ipSegments[index + 1])
+    path = '/' + uniqueSegments.join('/')
   }
 
   // Normalize path by removing trailing slashes and duplicate slashes
   path = path.replace(/\/+/g, '/').replace(/\/$/, '') || '/'
+
+  // Additional check for IP address in path
+  const ipPattern = /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/
+  if (ipPattern.test(path)) {
+    // Remove all IP address segments from path
+    path = path.split('/').filter(segment => !ipPattern.test(segment)).join('/')
+    path = path || '/' // Ensure path is not empty
+  }
 
   console.log(`[Middleware] Request path: ${path}`)
 
