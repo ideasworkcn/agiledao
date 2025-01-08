@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import {TaskHourTableItem } from '@/types/Model';
 import moment from 'moment';
+export const dynamic = 'force-dynamic'; // 强制动态渲染
 
 export const GET = async (req: NextRequest) => {
   try {

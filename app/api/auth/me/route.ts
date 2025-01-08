@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { verifyToken } from '@/lib/auth'
 import prisma from '@/lib/db'
 import { cookies } from 'next/headers'
-
+export const dynamic = 'force-dynamic'; // 强制动态渲染
 
 export async function GET() {
   

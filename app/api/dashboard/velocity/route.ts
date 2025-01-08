@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { VelocityItem } from '@/types/Model';
-
+export const dynamic = 'force-dynamic'; // 强制动态渲染
 
 export async function GET(request: Request) {
   try {
