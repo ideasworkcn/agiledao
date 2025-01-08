@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
+export const dynamic = 'force-dynamic'; // 强制动态渲染
 
 export async function GET(request: NextRequest) {
   try {

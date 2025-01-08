@@ -36,6 +36,8 @@ const protectedRoutes = [
 
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname
+  const { pathname } = request.nextUrl;
+
   console.log(`[Middleware] Request path: ${path}`)
 
   // Improved path matching function
@@ -47,6 +49,12 @@ export async function middleware(request: NextRequest) {
     }
     // Handle exact matches
     return path === publicPath || path.startsWith(publicPath + '/')
+  }
+
+
+  // 检查是否是静态资源路径
+  if (pathname.startsWith('/_next/static')) {
+    return NextResponse.next();
   }
 
   // Allow public paths
