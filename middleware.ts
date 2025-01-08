@@ -83,13 +83,21 @@ export async function middleware(request: NextRequest) {
     console.log(`[Middleware] Token payload:`, payload)
   } catch (error) {
     console.error(`[Middleware] Token verification error:`, error)
-    return NextResponse.redirect(new URL('/login', request.url))
+    // Add redirect URL to prevent infinite redirects
+    if (!path.startsWith('/login')) {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+    return NextResponse.next()
   }
 
   // Redirect to login if not authenticated
   if (!payload) {
     console.log(`[Middleware] Unauthenticated request, redirecting to login`)
-    return NextResponse.redirect(new URL('/login', request.url))
+    // Add redirect URL to prevent infinite redirects
+    if (!path.startsWith('/login')) {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+    return NextResponse.next()
   }
 
   // Add user info to request headers
@@ -110,7 +118,11 @@ export async function middleware(request: NextRequest) {
   if (!isPathAllowed) {
     console.log(`[Middleware] Access denied for role ${payload.role} to path ${path}`)
     console.log(`Allowed paths for role ${payload.role}:`, allowedPaths)
-    return NextResponse.redirect(new URL('/unauthorized', request.url))
+    // Add redirect URL to prevent infinite redirects
+    if (!path.startsWith('/unauthorized')) {
+      return NextResponse.redirect(new URL('/unauthorized', request.url))
+    }
+    return NextResponse.next()
   }
 
   // Continue with authenticated request
