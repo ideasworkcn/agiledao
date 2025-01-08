@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { Task, BurndownItem } from '@/types/Model';
+import {  BurndownItem } from '@/types/Model';
 import  db  from '@/lib/db';
 import moment from 'moment';
 
@@ -28,8 +28,8 @@ export async function GET(request: Request) {
       where: { 
         sprint_id: sprintId,
         create_time: {
-          gte: start_date as string,
-          lte: end_date as string
+          gte: `${start_date as string} 00:00:01`,
+          lte: `${end_date as string} 23:59:59`
         }
       },
       select: { create_time: true, estimated_hours: true }
@@ -104,8 +104,12 @@ export async function GET(request: Request) {
 
     return NextResponse.json(burndownData);
   } catch (error) {
+    console.error('Error calculating burndown data:', error);
     return NextResponse.json(
-      { error: 'Failed to calculate burndown data' },
+      { 
+        error: 'Failed to calculate burndown data',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }

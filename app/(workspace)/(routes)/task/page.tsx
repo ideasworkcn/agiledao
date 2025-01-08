@@ -8,25 +8,13 @@ import {
 } from "@/components/ui/accordion";
 import "@/app/globals.css";
 import { Toaster } from "@/components/ui/toaster";
-import { PlusIcon, CheckSquare } from "lucide-react";
 
 import TaskBoard from "@/components/task/TaskBoard";
 import TaskHoursTable from "@/components/task/TaskHoursTable";
 
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogDescription,
-  DialogTitle,
-  DialogClose,
-} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { toast, useToast } from "@/hooks/use-toast";
-import type { Product, Task, TaskHour,UserStory } from '@/types/Model'
+import {  useToast } from "@/hooks/use-toast";
+import type { Product, Task,UserStory } from '@/types/Model'
 
 import {
   DropdownMenu,
@@ -34,7 +22,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import Router from "next/router";
 import { Sprint,User } from "@/types/Model";
 
 export default function Task() {
@@ -102,7 +89,7 @@ export default function Task() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ ...backlog, status: "已完成" })
+          body: JSON.stringify({ ...backlog, status: "Done" })
         });
         
         const response = await fetch(`/api/sprint/userstory-task?sprint_id=${sprint.id}`);
@@ -196,7 +183,13 @@ export default function Task() {
                           <div className="font-medium text-gray-700 text-sm sm:text-base">
                             {backlog.number}
                           </div>
-                          <span className="text-xs sm:text-sm font-medium px-2 py-1 rounded-full bg-blue-100 text-blue-700 ml-2">
+                          <span className={`text-xs sm:text-sm font-medium px-2 py-1 rounded-full ml-2 ${
+                            backlog.status === 'In Progress' 
+                              ? 'bg-orange-100 text-orange-700'
+                              : backlog.status === 'Done'
+                              ? 'bg-green-100 text-green-700'
+                              : 'bg-blue-100 text-blue-700'
+                          }`}>
                             {backlog.status}
                           </span>
                         </div>

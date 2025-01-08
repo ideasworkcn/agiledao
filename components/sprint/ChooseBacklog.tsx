@@ -14,7 +14,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -39,7 +38,6 @@ function ChooseBacklog({
   addBacklogToSprint,
 }: ChooseBacklogProps) {
   const [searchTerm, setSearchTerm] = useState("");
-  const { toast } = useToast();
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);

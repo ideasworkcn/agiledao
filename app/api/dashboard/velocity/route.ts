@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
-import { Task,VelocityItem } from '@/types/Model';
+import { VelocityItem } from '@/types/Model';
 
 
 export async function GET(request: Request) {

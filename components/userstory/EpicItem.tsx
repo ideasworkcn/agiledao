@@ -10,7 +10,7 @@ interface EpicItemProps {
   epic: Epic;
   index: number;
   epicDelete: (epicId: string) => void;
-  epicUpdate: (epicId: string, newName: string) => void;
+  epicUpdate: (epic:Epic) => void;
   epicAdd:(epicId:string)=>void;
   featureAdd: (epicId: string) => void;
   featureUpdate: (featureId: string, newName: string) => void;
@@ -34,7 +34,7 @@ export default function EpicItem({
   storyDelete
 }: EpicItemProps) {
   const handleNameChange = (newName: string) => {
-    epicUpdate(epic.id, newName);
+    epicUpdate({...epic, name: newName});
   };
 
   return (

@@ -1,8 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-// import Board from "@/components/userstory/Board";
 import "@/app/globals.css";
-// import { getUserStoryMap } from "@/api/userstory.api";
 import { Toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
 import { Product } from '@/types/Model';
@@ -10,7 +8,6 @@ import Board from "@/components/userstory/Board";
 
 
 const StoryBoard = () => {
-  const [columns, setColumns] = useState<any[]>([]);
   const [product, setProduct] = useState<Product>();
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
 
@@ -20,12 +17,7 @@ const StoryBoard = () => {
       const product = JSON.parse(storedProduct);
       setProduct(product);
       console.log(product)
-      const productId = product.id;
     }
-    // getUserStoryMap(productId).then((data) => {
-    //   console.log(data);
-    //   setColumns(data);
-    // });
   }, []);
   
 

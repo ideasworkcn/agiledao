@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
@@ -9,7 +8,6 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import Link from 'next/link'
 
 export default function LoginPage() {
-  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -58,7 +56,6 @@ export default function LoginPage() {
         throw new Error(errorMessage)
       }
 
-      const { token } = await response.json()
        
        // Fetch user info using token
        const userResponse = await fetch('/api/auth/me');
@@ -130,7 +127,7 @@ export default function LoginPage() {
               {loading ? 'Logging in...' : 'Login'}
             </Button>
             <div className="text-center text-sm">
-              Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
               <Link href="/register" className="text-primary hover:underline">
                 Register here
               </Link>

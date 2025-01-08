@@ -1,13 +1,11 @@
 import { useState ,useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogDescription, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PlusIcon } from "lucide-react";
-import { TaskHour ,Sprint,Task} from "@/types/Model";
+import { TaskHour ,Sprint,Task,UserStory} from "@/types/Model";
 import { Toaster } from "../ui/toaster";
-import { toast, useToast } from "@/hooks/use-toast";
-import { UserStory } from "@prisma/client";
+import {  useToast } from "@/hooks/use-toast";
 
 interface TaskHoursTableProps {
   backlogList:UserStory[];
@@ -74,17 +72,17 @@ export default function TaskHoursTable({
           .reduce((sum, hour) => sum + (hour.hours || 0), 0);
       };
 
-      const updateBacklog = async (backlog: any) => {
-        const updatedTasks = await Promise.all(backlog.tasks.map(async (task: any) => {
+      const updateBacklog = async (backlog: UserStory) => {
+        const updatedTasks = backlog.tasks?.map((task: Task) => {
           if (task.id === selectedTask?.id) {
-            const totalHours = await calculateTotalHours(task.id);
+            const totalHours = calculateTotalHours(task.id);
             return {
               ...task,
               hours: totalHours
             };
           }
           return task;
-        }));
+        });
 
         return {
           ...backlog,

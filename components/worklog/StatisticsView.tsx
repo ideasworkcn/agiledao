@@ -1,7 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
-import { TaskHourTableItem, User } from '@/types/Model'
+import { TaskHourTableItem } from '@/types/Model'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import moment from 'moment'
@@ -9,10 +8,9 @@ import moment from 'moment'
 
 interface StatisticsViewProps {
   workItems: TaskHourTableItem[]
-  isAdmin: boolean
 }
 
-export default function StatisticsView({ workItems, isAdmin }: StatisticsViewProps) {
+export default function StatisticsView({ workItems }: StatisticsViewProps) {
 
   const totalHours = workItems.reduce((sum, item) => sum + item.hours, 0)
   const uniqueDates = new Set(workItems.map(item => moment(item.create_time).format('YYYY-MM-DD')))

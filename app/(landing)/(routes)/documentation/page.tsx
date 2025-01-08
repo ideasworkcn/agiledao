@@ -1,6 +1,5 @@
 import { Sidebar } from './component/SideBar'
 import { Content } from './component/Content'
-import { useSearchParams } from 'next/navigation'
 
 export default function DocumentationPage({
   searchParams,

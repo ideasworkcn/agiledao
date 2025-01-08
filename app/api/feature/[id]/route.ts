@@ -13,7 +13,11 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       return NextResponse.json({ error: 'Feature not found' }, { status: 404 });
     }
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch feature' }, { status: 500 });
+    console.error('Failed to fetch feature:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch feature', details: error instanceof Error ? error.message : 'Unknown error' },
+      { status: 500 }
+    );
   }
 }
 

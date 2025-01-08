@@ -15,7 +15,7 @@ import BarChart from '@/components/dashboard/BarChart'
 import { VelocityItem, WorkLoadItem } from "@/types/Model";
 
 
-import { useState, useEffect,memo } from "react";
+import { useState, useEffect } from "react";
 
 // import { getSprintBacklogsAndTasks } from "@/api/task.api";
 import { Product, Sprint, UserStory, Task,BurndownItem } from "@/types/Model";
@@ -29,7 +29,7 @@ export default function Dashboard() {
   const [backlogList, setBacklogList] = useState<UserStory[]>([]);
   const [taskList, setTaskList] = useState<Task[]>([]);
   const [burndownChartData, setBurndownChartData] = useState([{ x: 0, y: 0 }]);
-  const [idealBurndownData, setIdealBurndownData] = useState([{ x: 0, y: 0 }]);
+  const [idealBurndownData, setIdealBurndownData] = useState([{ x: "", y: 0 }]);
 
   const [velocityData, setVelocityData] = useState([{ name: "1", count: 0 }]);
   const [workloadData, setWorkloadData] = useState([{ id: "1", value: 0 }]);
@@ -37,7 +37,7 @@ export default function Dashboard() {
 
   useEffect(() => {
 
-    let currentProduct = localStorage.getItem("currentProduct");
+    const currentProduct = localStorage.getItem("currentProduct");
     if (currentProduct) {
       setProduct(JSON.parse(currentProduct));
     }
@@ -115,7 +115,10 @@ export default function Dashboard() {
               setBurndownChartData(realBurndownData);
 
               // 计算理想燃尽图
-              const idealBurndownData = calculateIdealBurndown(burndown);
+              const idealBurndownData = calculateIdealBurndown(burndown).map(item => ({
+                x: item.x,
+                y: item.y
+              }));
               setIdealBurndownData(idealBurndownData);
             })
             .catch(error => {
@@ -130,6 +133,7 @@ export default function Dashboard() {
               return response.json();
             })
             .then(backlogs => {
+              setSprint(currentSprint);
               setBacklogList(backlogs);
               setTaskList(backlogs.flatMap((backlog: { tasks: Task; }) => backlog.tasks));
             })
@@ -144,18 +148,22 @@ export default function Dashboard() {
     }
   }, [currentSprint]);
 
-  const calculateIdealBurndown = (burndown:any) => {
-    let idealBurndownData = [];
-    let remaining = burndown[0].remainingHours;
-    let totalDays = burndown.length;
-    let dailyBurn = remaining / totalDays;
+  const calculateIdealBurndown = (burndown: BurndownItem[]) => {
+    if (!burndown || burndown.length === 0) return [];
+
+    const idealBurndownData = [];
+    const initialHours = burndown[0].remainingHours;
+    const totalDays = burndown.length;
+    const dailyBurn = initialHours / totalDays;
+
     for (let i = 0; i < totalDays; i++) {
+      const remaining = Math.max(0, initialHours - (dailyBurn * i));
       idealBurndownData.push({
         x: burndown[i].date,
-        y: remaining,
+        y: parseFloat(remaining.toFixed(2)), // Round to 2 decimal places
       });
-      remaining -= dailyBurn;
     }
+
     return idealBurndownData;
   };
 

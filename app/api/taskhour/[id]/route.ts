@@ -1,63 +1,65 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient } from "@prisma/client";
+import { NextRequest, NextResponse } from 'next/server'
+import prisma from '@/lib/db'
 
-const prisma = new PrismaClient();
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = req.query;
+    const { id } = params
 
-    if (req.method === "GET") {
-      const taskHour = await prisma.taskHour.findUnique({
-        where: { id: id as string },
-        include: {
-          task: true,
-        },
-      });
+    const taskHour = await prisma.taskHour.findUnique({
+      where: { id },
+      include: {
+        task: true,
+      },
+    })
 
-      if (!taskHour) {
-        return res.status(404).json({ message: "Task hour not found" });
-      }
-
-      return res.status(200).json(taskHour);
+    if (!taskHour) {
+      return NextResponse.json({ message: 'Task hour not found' }, { status: 404 })
     }
 
-    if (req.method === "DELETE") {
-      // Get the task hour record before deleting
-      const taskHour = await prisma.taskHour.findUnique({
-        where: { id: id as string }
-      });
-
-      if (!taskHour) {
-        return res.status(404).json({ message: "Task hour not found" });
-      }
-
-      // Delete the task hour
-      const deletedTaskHour = await prisma.taskHour.delete({
-        where: { id: id as string }
-      });
-
-      // Update total hours in the related task
-      await prisma.task.update({
-        where: { id: taskHour.task_id },
-        data: {
-          hours: {
-            decrement: taskHour.hours || 0
-          }
-        }
-      });
-
-      return res.status(200).json(deletedTaskHour);
-    }
-
-    return res.status(405).json({ message: "Method not allowed" });
+    return NextResponse.json(taskHour)
   } catch (error) {
-    console.error("Error in task hour API:", error);
-    return res.status(500).json({ message: "Internal server error" });
-  } finally {
-    await prisma.$disconnect();
+    console.error('Error in task hour API:', error)
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 })
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const { id } = params
+
+    // Get the task hour record before deleting
+    const taskHour = await prisma.taskHour.findUnique({
+      where: { id }
+    })
+
+    if (!taskHour) {
+      return NextResponse.json({ message: 'Task hour not found' }, { status: 404 })
+    }
+
+    // Delete the task hour
+    const deletedTaskHour = await prisma.taskHour.delete({
+      where: { id }
+    })
+
+    // Update total hours in the related task
+    await prisma.task.update({
+      where: { id: taskHour.task_id },
+      data: {
+        hours: {
+          decrement: taskHour.hours || 0
+        }
+      }
+    })
+
+    return NextResponse.json(deletedTaskHour)
+  } catch (error) {
+    console.error('Error in task hour API:', error)
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 })
   }
 }

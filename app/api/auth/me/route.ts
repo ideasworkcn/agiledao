@@ -4,7 +4,8 @@ import prisma from '@/lib/db'
 import { cookies } from 'next/headers'
 
 
-export async function GET(request: Request) {
+export async function GET() {
+  
   try {
     const cookieStore = cookies()
     const token = cookieStore.get('token')?.value

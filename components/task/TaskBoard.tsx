@@ -2,11 +2,11 @@
 
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { Button } from "../ui/button";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { TrashIcon ,PlusIcon, ListTodo, Activity, Check} from "lucide-react";
 import moment from "moment";
 import { Toaster } from "@/components/ui/toaster";
-import { toast, useToast } from "@/hooks/use-toast";
+import {  useToast } from "@/hooks/use-toast";
 import { useMemo } from "react";
 import { Task, User, Sprint, UserStory } from "@/types/Model";
 
@@ -487,10 +487,10 @@ export default function TaskBoard({
                                 onClick={(event) => event.stopPropagation()}
                                 className="mb-2 w-full border-b border-gray-300 focus:border-blue-500 focus:outline-none px-2 py-1 text-base font-medium transition-colors duration-200"
                               />
-                              <textarea
+                              <input
                                 name="description"
                                 value={editingTask.description}
-                                onChange={(event)=>handleEditChange}
+                                onChange={(event)=>handleEditChange(event)}
                                 onKeyDown={(event) => {
                                   if (event.key === 'Enter') {
                                     handleEditSave();

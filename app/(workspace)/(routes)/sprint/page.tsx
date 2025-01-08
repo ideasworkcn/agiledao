@@ -1,22 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import "@/app/globals.css";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast"
 import SprintInfo from "@/components/sprint/SprintInfo";
 import SprintBacklog from "@/components/sprint/SprintBacklog";
 
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from "@/components/ui/table";
 import History from "@/components/sprint/History";
-// import ChooseBacklog from "@/components/sprint/ChooseBacklog";
 import { Product,UserStory,Sprint } from "@/types/Model";
 
 
@@ -152,8 +141,8 @@ export default function SprintManagement() {
       });
     }
   };
-
   const deleteSprintById = async (id: string) => {
+
     try {
       const response = await fetch(`/api/sprint/${id}`, {
         method: 'DELETE',
@@ -165,14 +154,15 @@ export default function SprintManagement() {
 
       toast({ title: "删除成功" });
       
-      // Refresh sprint list
-      const sprintsResponse = await fetch(`/api/sprint?productId=${productId}`);
-      const sprints = await sprintsResponse.json();
-      setSprintList(sprints);
+      // Update sprint list locally instead of fetching from API
+      const updatedSprints = sprintList.filter(sprint => sprint.id !== id);
+      setSprintList(updatedSprints);
       
       // Set the first sprint as active if any exist
-      if (sprints.length > 0) {
-        getSprintById(sprints[0].id);
+      if (updatedSprints.length > 0) {
+        getSprintById(updatedSprints[0].id);
+      } else {
+        setSprint(undefined); // Clear current sprint if no sprints left
       }
     } catch (error) {
       console.error('Error deleting sprint:', error);

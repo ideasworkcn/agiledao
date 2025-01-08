@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { useToast } from "@/hooks/use-toast";
 import type { DropResult } from "@hello-pangea/dnd";
-import type { Epic, Feature, UserStory, Product } from "@/types/Model";
+import type { Epic, UserStory, Product } from "@/types/Model";
 import EpicItem from "./EpicItem";
 import { Plus } from "lucide-react";
 
@@ -127,19 +127,18 @@ export default function Board({ product }: { product: Product }) {
       toast({ title: "删除失败", variant: "destructive" });
     }
   };
-
-  const updateEpic = async (epicId: string, newName: string) => {
+  const updateEpic = async (epic: Epic) => {
     try {
       const response = await fetch(`/api/epic`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id: epicId, name: newName }),
+        body: JSON.stringify(epic),
       });
       if (!response.ok) throw new Error('Failed to update epic');
       const updatedEpic = await response.json();
-      setEpics(epics?.map((epic) => (epic.id === epicId ? { ...epic, name: updatedEpic.name } : epic)) || []);
+      setEpics(epics?.map((e) => (e.id === epic.id ? { ...e, name: updatedEpic.name } : e)) || []);
       toast({ title: "Epic 更新成功", variant: "default" });
     } catch (error) {
       console.error("Error updating epic:", error);
