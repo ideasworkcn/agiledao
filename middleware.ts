@@ -15,7 +15,8 @@ const publicPaths = Object.freeze([
   '/workspace',
   '/unauthorized',
   '/api/(.*)', // Match all API paths and subpaths using regex pattern
-  '/worklog/user'
+  '/worklog/user',
+  '/_next/static/(.*)', 
 ])
 
 const protectedRoutes = [
