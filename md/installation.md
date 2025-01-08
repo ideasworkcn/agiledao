@@ -8,6 +8,12 @@
 - **npm** 或 **yarn**: 用于管理依赖
 - **Git**: 用于克隆项目仓库
 
+
+   ```bash
+   sudo apt update
+   sudo apt install nodejs npm
+      ```
+
 ### 2. 下载项目
 1. 打开终端或命令行工具。
 2. 克隆项目仓库：

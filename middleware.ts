@@ -31,12 +31,15 @@ const protectedRoutes = [
   { path: '/userstory', roles: ['Product Owner', 'Scrum Master'] },
   { path: '/backlog', roles: ['Product Owner', 'Scrum Master'] },
   { path: '/worklog/admin', roles: ['Scrum Master'] },
-  
 ];
 
 export async function middleware(request: NextRequest) {
-  const path = request.nextUrl.pathname
-  const { pathname } = request.nextUrl;
+  // Get base path by removing domain and query parameters
+  const url = new URL(request.url)
+  let path = url.pathname
+
+  // Normalize path by removing trailing slashes and duplicate slashes
+  path = path.replace(/\/+/g, '/').replace(/\/$/, '') || '/'
 
   console.log(`[Middleware] Request path: ${path}`)
 
@@ -51,10 +54,9 @@ export async function middleware(request: NextRequest) {
     return path === publicPath || path.startsWith(publicPath + '/')
   }
 
-
-  // 检查是否是静态资源路径
-  if (pathname.startsWith('/_next/static')) {
-    return NextResponse.next();
+  // Check if static resource path
+  if (path.startsWith('/_next/static')) {
+    return NextResponse.next()
   }
 
   // Allow public paths
