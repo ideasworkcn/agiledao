@@ -2,38 +2,90 @@
 
 ## 下载和安装
 
-1. 访问 [AgileDao 官方网站](https://www.agiledao.com) 并导航到下载页面。
-2. 根据您的操作系统选择合适的安装包（Windows、macOS 或 Linux）。
-3. 下载完成后，运行安装程序并按照提示完成安装。
+### 1. 环境要求
+在开始安装之前，请确保您的系统满足以下要求：
+- **Node.js**: 版本 18.x 或更高
+- **npm** 或 **yarn**: 用于管理依赖
+- **Git**: 用于克隆项目仓库
 
-## 系统要求和兼容性
+### 2. 下载项目
+1. 打开终端或命令行工具。
+2. 克隆项目仓库：
+   ```bash
+   git clone https://gitee.com/ideaswork/agiledao
+   ```
+3. 进入项目目录：
+   ```bash
+   cd project-name
+   ```
 
-在安装 AgileDao 之前，请确保您的系统满足以下要求：
+### 3. 安装依赖
+1. 使用 npm 或 yarn 安装项目依赖：
+   ```bash
+   npm install
+   ```
+   或
+   ```bash
+   yarn install
+   ```
 
-- **操作系统**: Windows 10 或更高版本，macOS 10.13 或更高版本，Ubuntu 18.04 或更高版本
-- **处理器**: 1 GHz 或更快的处理器
-- **内存**: 至少 2 GB RAM
-- **存储空间**: 至少 500 MB 可用空间
-- **网络连接**: 需要互联网连接以进行初始设置和更新
+### 4. 配置环境变量
+1. 在项目根目录下创建 `.env` 文件：
+   ```bash
+   touch .env
+   ```
+2. 打开 `.env` 文件并填写以下配置项：
+   ```env
+   DATABASE_URL="file:./dev.db"
+   JWT_SECRET="your_jwt_secret_key"
+   ```
+   请根据您的数据库配置和需求修改这些值。
 
-## 安装步骤
+### 5. 数据库迁移
+1. 运行 Prisma 迁移以创建数据库表：
+   ```bash
+   npm run migrate
+   ```
+2. 如果需要生成 Prisma 客户端，请运行：
+   ```bash
+   npx prisma generate
+   ```
 
-### Windows
+### 6. 启动开发服务器
+1. 启动开发服务器：
+   ```bash
+   npm run dev
+   ```
+   或
+   ```bash
+   yarn dev
+   ```
+2. 打开浏览器并访问 `http://localhost:3000`，您应该会看到项目的首页。
 
-1. 下载 Windows 安装包 (.exe 文件)。
-2. 双击下载的文件以启动安装程序。
-3. 按照安装向导的指示完成安装。
+### 7. 生产环境部署
+1. 构建项目：
+   ```bash
+   npm run build
+   ```
+   或
+   ```bash
+   yarn build
+   ```
+2. 启动生产服务器：
+   ```bash
+   npm start
+   ```
+   或
+   ```bash
+   yarn start
+   ```
 
-### macOS
-
-1. 下载 macOS 安装包 (.dmg 文件)。
-2. 打开下载的 .dmg 文件，并将 AgileDao 拖动到应用程序文件夹中。
-3. 打开应用程序文件夹并启动 AgileDao。
-
-### Linux
-
-1. 下载适用于 Linux 的安装包 (.deb 或 .rpm 文件)。
-2. 打开终端并导航到下载目录。
-3. 使用以下命令安装 AgileDao：
-
-对于 Debian/Ubuntu 系统：
+### 8. 常见问题
+- **问题 1**: 数据库连接失败。
+  - **解决方案**: 检查 `.env` 文件中的 `DATABASE_URL` 配置是否正确。
+- **问题 2**: 依赖安装失败。
+  - **解决方案**: 确保您的 Node.js 和 npm/yarn 版本符合要求，并尝试清除缓存后重新安装：
+    ```bash
+    npm cache clean --force
+    npm install
+    ```

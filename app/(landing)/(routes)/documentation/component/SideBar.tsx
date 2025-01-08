@@ -3,13 +3,9 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import { useSearchParams } from 'next/navigation'
-
-
-
 
 const docs = [
   {
@@ -34,18 +30,18 @@ const docs = [
   {
     title: "核心功能",
     items: [
+      { title: "用户故事地图", href: "/documentation/userstory-map" },
       { title: "Backlog管理", href: "/documentation/backlog-management" },
       { title: "Sprint规划", href: "/documentation/sprint-planning" },
-      { title: "任务分配", href: "/documentation/task-assignment" },
-      { title: "看板视图", href: "/documentation/kanban-view" },
+      { title: "任务Kanban", href: "/documentation/task-kanban" },
+      { title: "冲刺报告", href: "/documentation/dashboard" },
+      { title: "工作日志", href: "/documentation/worklog" },
     ],
   },
   {
     title: "高级功能",
     items: [
       { title: "报告和分析", href: "/documentation/reporting-analysis" },
-      { title: "集成", href: "/documentation/integration" },
-      { title: "自定义", href: "/documentation/customization" },
     ],
   },
   {
@@ -89,40 +85,37 @@ export function Sidebar({ className }: { className?: string }) {
 
   return (
     <div className={cn("w-64 bg-gray-100 border-r", className)}>
-      <ScrollArea className="h-[calc(100vh-3.5rem)] py-6">
-        <div className="px-4 space-y-6">
-          <Input
-            type="search"
-            placeholder="Search document..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full"
-          />
-          {filteredDocs.map((section) => (
-            <div key={section.title}>
-              <h2 className="mb-2 text-lg font-semibold tracking-tight">{section.title}</h2>
-              <div className="space-y-1">
-                {section.items.map((item) => {
-                  const file = item.href.split('/').pop() || ''
-                  return (
-                    <Link
-                      key={item.href}
-                      href={createHref(file)}
-                      className={cn(
-                        "block px-2 py-1 text-sm hover:bg-gray-200 rounded",
-                        searchParams.get('file') === file && "bg-gray-200 font-medium"
-                      )}
-                    >
-                      {item.title}
-                    </Link>
-                  )
-                })}
-              </div>
+      <div className="px-4 space-y-6 py-6">
+        <Input
+          type="search"
+          placeholder="Search document..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full"
+        />
+        {filteredDocs.map((section) => (
+          <div key={section.title}>
+            <h2 className="mb-2 text-lg font-semibold tracking-tight">{section.title}</h2>
+            <div className="space-y-1">
+              {section.items.map((item) => {
+                const file = item.href.split('/').pop() || ''
+                return (
+                  <Link
+                    key={item.href}
+                    href={createHref(file)}
+                    className={cn(
+                      "block px-2 py-1 text-sm hover:bg-gray-200 rounded",
+                      searchParams.get('file') === file && "bg-gray-200 font-medium"
+                    )}
+                  >
+                    {item.title}
+                  </Link>
+                )
+              })}
             </div>
-          ))}
-        </div>
-      </ScrollArea>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
-

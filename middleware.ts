@@ -23,7 +23,7 @@ const protectedRoutes = [
   { path: '/workspace', roles: ['Team Member', 'Scrum Master', 'Product Owner'] },
   { path: '/dashboard', roles: ['Team Member', 'Scrum Master', 'Product Owner'] },
   { path: '/task', roles: ['Team Member', 'Scrum Master', 'Product Owner'] },
-  { path: '/worklog/admin', roles: ['Team Member', 'Scrum Master', 'Product Owner'] },
+  { path: '/worklog/user', roles: ['Team Member', 'Scrum Master', 'Product Owner'] },
   { path: '/documentation', roles: ['Team Member', 'Scrum Master', 'Product Owner'] },
   { path: '/product', roles: ['Scrum Master'] },
   { path: '/sprint', roles: ['Scrum Master'] },

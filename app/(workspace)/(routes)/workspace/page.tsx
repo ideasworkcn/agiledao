@@ -156,14 +156,14 @@ export default function Workspace() {
         color: "text-orange-500",
         roles: ['Team Member', 'Scrum Master', 'Product Owner']
       },
-      {
-        href: "/worklog/scrum-master",
-        title: "工作统计",
-        content: "查看工作统计",
-        icon: BarChart2,
-        color: "text-orange-500",
-        roles: [ 'Scrum Master',]
-      },
+      // {
+      //   href: "/worklog/scrum-master",
+      //   title: "工作统计",
+      //   content: "查看工作统计",
+      //   icon: BarChart2,
+      //   color: "text-orange-500",
+      //   roles: [ 'Scrum Master',]
+      // },
  
     ];
 
@@ -178,10 +178,10 @@ export default function Workspace() {
     <div className="flex flex-col bg-white">
       <div className="container mx-auto px-4 py-16">
         <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4 text-center">
-          敏捷之道 AgileDao
+          敏捷之道 Agiledao
         </h1>
         <p className="text-center text-gray-600 dark:text-gray-400 mb-12 text-xl">
-          极简敏捷开发 Scrum 管理工具
+          极简敏捷开发管理工具
         </p>
         <div className="bg-gray-50 dark:bg-gray-900 rounded-3xl p-4 sm:p-6 md:p-8 mb-8 sm:mb-10 md:mb-12">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-6">

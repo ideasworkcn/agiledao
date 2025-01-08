@@ -15,20 +15,13 @@ import { useRouter } from 'next/navigation';
 import {
     Map
 } from "lucide-react";
-
+import { Button } from "@/components/ui/button";
 
 const navMenu = [
   { href: "/", label: "Home" },
   { href: "/workspace", label: "Workspace" },
   { href: "/dashboard", label: "Dashboard" },
-//   { href: "/task", label: "Task" },
-//   { href: "/worklog/admin", label: "Worklog" },
   { href: "/documentation", label: "Documentation" },
-//   { href: "/product", label: "Product" },
-//   { href: "/sprint", label: "Sprint" },
-//   { href: "/team", label: "Team" },
-//   { href: "/userstory", label: "UserStory" },
-//   { href: "/backlog", label: "Backlog" }
 ];
 
 const Navbar = () => {
@@ -49,9 +42,8 @@ const Navbar = () => {
                 throw new Error('Logout failed');
             }
 
-       // Clear user info from localStorage
-       localStorage.removeItem('user');
-       localStorage.removeItem('user_id');
+            localStorage.removeItem('user');
+            localStorage.removeItem('user_id');
             document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Strict; Secure';
             setUser(null);
             router.push('/login');
@@ -112,8 +104,8 @@ const Navbar = () => {
                     </Link>
                 ))}
             </nav>
-            <div className="ml-auto">
-                {user && (
+            <div className="ml-auto flex items-center gap-4">
+                {user ? (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <div className="flex items-center gap-2 cursor-pointer">
@@ -139,6 +131,15 @@ const Navbar = () => {
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
+                ) : (
+                    <>
+                        <Button variant="outline" onClick={() => router.push('/login')}>
+                            登录
+                        </Button>
+                        <Button onClick={() => router.push('/register')}>
+                            注册
+                        </Button>
+                    </>
                 )}
             </div>
         </header>

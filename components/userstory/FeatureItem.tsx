@@ -46,6 +46,7 @@ export default function FeatureItem({
         >
           <div className="flex justify-between items-center">
             <EditableText 
+              className="pl-2 font-medium text-gray-800"
               text={feature.name} 
               onTextChange={(newText: string) => handleNameChange(feature.id, newText)} 
             />

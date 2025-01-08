@@ -487,10 +487,10 @@ export default function TaskBoard({
                                 onClick={(event) => event.stopPropagation()}
                                 className="mb-2 w-full border-b border-gray-300 focus:border-blue-500 focus:outline-none px-2 py-1 text-base font-medium transition-colors duration-200"
                               />
-                              <textarea
+                              <input
                                 name="description"
                                 value={editingTask.description}
-                                onChange={()=>handleEditChange}
+                                onChange={(event)=>handleEditChange(event)}
                                 onKeyDown={(event) => {
                                   if (event.key === 'Enter') {
                                     handleEditSave();
