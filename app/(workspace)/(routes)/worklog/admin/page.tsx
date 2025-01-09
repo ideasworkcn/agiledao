@@ -1,7 +1,7 @@
 const StatisticPeriodSummary = () => {
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-semibold">统计周期总结</h2>
+      <h2 className="text-xl font-semibold">统计周期总结（待开发）</h2>
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">

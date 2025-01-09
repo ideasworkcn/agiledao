@@ -27,28 +27,28 @@ export function SearchInterface({ isAdmin, users, onSearch, onExport }: SearchIn
 
     switch (value) {
       case 'today':
-        startDate = now.startOf('day').toDate()
-        endDate = now.endOf('day').toDate()
+        startDate = moment().startOf('day').toDate()
+        endDate = moment().endOf('day').toDate()
         break
       case 'yesterday':
-        startDate = now.subtract(1, 'day').startOf('day').toDate()
-        endDate = now.endOf('day').toDate()
+        startDate = moment().subtract(1, 'day').startOf('day').toDate()
+        endDate = moment().subtract(1, 'day').endOf('day').toDate()
         break
       case 'thisWeek':
-        startDate = now.startOf('week').toDate()
-        endDate = now.endOf('week').toDate()
+        startDate = moment().startOf('week').toDate()
+        endDate = moment().endOf('week').toDate()
         break
       case 'lastWeek':
-        startDate = now.subtract(1, 'week').startOf('week').toDate()
-        endDate = now.endOf('week').toDate()
+        startDate = moment().subtract(1, 'week').startOf('week').toDate()
+        endDate = moment().subtract(1, 'week').endOf('week').toDate()
         break
       case 'thisMonth':
-        startDate = now.startOf('month').toDate()
-        endDate = now.endOf('month').toDate()
+        startDate = moment().startOf('month').toDate()
+        endDate = moment().endOf('month').toDate()
         break
       case 'lastMonth':
-        startDate = now.subtract(1, 'month').startOf('month').toDate()
-        endDate = now.endOf('month').toDate()
+        startDate = moment().subtract(1, 'month').startOf('month').toDate()
+        endDate = moment().subtract(1, 'month').endOf('month').toDate()
         break
     }
 
