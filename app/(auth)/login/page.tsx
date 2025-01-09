@@ -56,6 +56,15 @@ export default function LoginPage() {
         throw new Error(errorMessage)
       }
 
+      // Get token from login response
+      const { token } = await response.json()
+      
+      // Store token in localStorage
+      localStorage.setItem('token', token)
+      
+      // Set token in cookies for server-side requests
+      document.cookie = `token=${token}; path=/;`
+
        
        // Fetch user info using token
        const userResponse = await fetch('/api/auth/me');
