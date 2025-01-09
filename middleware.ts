@@ -25,11 +25,10 @@ const roleAccess: RoleAccess = {
 
 export async function middleware(request: NextRequest) {
   const { pathname } = new URL(request.url)
-  const path = pathname.replace(/\/+/g, '/').replace(/\/$/, '') || '/'
 
   // Check public paths
   const publicPathsArray = Array.from(publicPaths)
-  if (publicPathsArray.some((p: string) => path === p || path.startsWith(p + '/'))) {
+  if (publicPathsArray.some((p: string) => pathname === p || pathname.startsWith(p + '/'))) {
     return NextResponse.next()
   }
 
@@ -39,11 +38,11 @@ export async function middleware(request: NextRequest) {
   try {
     payload = token ? await verifyToken(token) : null
   } catch {
-    return path.startsWith('/login') ? NextResponse.next() : NextResponse.redirect(new URL('/login', request.url))
+    return pathname.startsWith('/login') ? NextResponse.next() : NextResponse.redirect(new URL('/login', request.url))
   }
 
   if (!payload) {
-    return path.startsWith('/login') ? NextResponse.next() : NextResponse.redirect(new URL('/login', request.url))
+    return pathname.startsWith('/login') ? NextResponse.next() : NextResponse.redirect(new URL('/login', request.url))
   }
 
   // Set user headers
@@ -53,9 +52,9 @@ export async function middleware(request: NextRequest) {
 
   // Check role access
   const role = payload.role as Role
-  const allowedPaths = roleAccess[role] || []
-  if (!allowedPaths.some((p: string) => path === p || path.startsWith(p + '/'))) {
-    return path.startsWith('/unauthorized') ? NextResponse.next() : NextResponse.redirect(new URL('/unauthorized', request.url))
+  const allowedpathnames = roleAccess[role] || []
+  if (!allowedpathnames.some((p: string) => pathname === p || pathname.startsWith(p + '/'))) {
+    return pathname.startsWith('/unauthorized') ? NextResponse.next() : NextResponse.redirect(new URL('/unauthorized', request.url))
   }
 
   return NextResponse.next({ request: { headers } })
