@@ -37,17 +37,6 @@ export async function middleware(request: NextRequest) {
   const url = new URL(request.url)
   let path = url.pathname
 
-  // Enhanced IP nesting issue handling
-  const ipPattern = /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g
-  const ipMatches = path.match(ipPattern) || []
-  
-  if (ipMatches.length > 1) {
-    path = path.split('/')
-      .filter(segment => !ipPattern.test(segment))
-      .join('/')
-    path = path || '/'
-  }
-
   // Normalize path
   path = path.replace(/\/+/g, '/').replace(/\/$/, '') || '/'
 
@@ -128,6 +117,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico).*)',
+    '/((?!_next/static|_next/image|favicon.ico|api/|static/).*)', // 确保排除所有静态资源
   ],
 }
