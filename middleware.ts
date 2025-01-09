@@ -19,8 +19,8 @@ type RoleAccess = Record<Role, string[]>
 
 const roleAccess: RoleAccess = {
   'Team Member': ['/', '/workspace', '/dashboard', '/task', '/worklog/user', '/documentation'],
-  'Scrum Master': ['/product', '/sprint', '/team', '/userstory', '/backlog', '/worklog/admin'],
-  'Product Owner': ['/userstory', '/backlog']
+  'Scrum Master': ['/', '/workspace', '/dashboard', '/task', '/worklog/user', '/documentation','/product', '/sprint', '/team', '/userstory', '/backlog', '/worklog/admin'],
+  'Product Owner': ['/', '/workspace', '/dashboard', '/task', '/worklog/user', '/documentation','/userstory', '/backlog']
 }
 
 export async function middleware(request: NextRequest) {
