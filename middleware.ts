@@ -16,7 +16,6 @@ const publicPaths = Object.freeze([
   '/unauthorized',
   '/api/(.*)', // Match all API paths and subpaths using regex pattern
   '/worklog/user',
-  '/_next/static/(.*)', 
 ])
 
 const protectedRoutes = [
@@ -35,7 +34,6 @@ const protectedRoutes = [
 ];
 
 export async function middleware(request: NextRequest) {
-  // Get base path by removing domain and query parameters
   const url = new URL(request.url)
   let path = url.pathname
 
@@ -43,34 +41,24 @@ export async function middleware(request: NextRequest) {
   const ipPattern = /\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g
   const ipMatches = path.match(ipPattern) || []
   
-  // If multiple IPs found, remove all IP segments and keep the rest
   if (ipMatches.length > 1) {
-    // Remove all IP address segments from path
     path = path.split('/')
       .filter(segment => !ipPattern.test(segment))
       .join('/')
-    path = path || '/' // Ensure path is not empty
+    path = path || '/'
   }
 
-  // Normalize path by removing trailing slashes and duplicate slashes
+  // Normalize path
   path = path.replace(/\/+/g, '/').replace(/\/$/, '') || '/'
 
   console.log(`[Middleware] Request path: ${path}`)
 
-  // Improved path matching function
   const isPublicPath = (publicPath: string) => {
-    // Handle regex paths
     if (publicPath.includes('(.*)')) {
       const regex = new RegExp(`^${publicPath.replace('(.*)', '.*')}$`)
       return regex.test(path)
     }
-    // Handle exact matches
     return path === publicPath || path.startsWith(publicPath + '/')
-  }
-
-  // Check if static resource path (considering possible IP prefix)
-  if (path.startsWith('/_next/static') || path.includes('/_next/static')) {
-    return NextResponse.next()
   }
 
   // Allow public paths
@@ -90,7 +78,6 @@ export async function middleware(request: NextRequest) {
     console.log(`[Middleware] Token payload:`, payload)
   } catch (error) {
     console.error(`[Middleware] Token verification error:`, error)
-    // Add redirect URL to prevent infinite redirects
     if (!path.startsWith('/login')) {
       return NextResponse.redirect(new URL('/login', request.url))
     }
@@ -100,7 +87,6 @@ export async function middleware(request: NextRequest) {
   // Redirect to login if not authenticated
   if (!payload) {
     console.log(`[Middleware] Unauthenticated request, redirecting to login`)
-    // Add redirect URL to prevent infinite redirects
     if (!path.startsWith('/login')) {
       return NextResponse.redirect(new URL('/login', request.url))
     }
@@ -112,12 +98,12 @@ export async function middleware(request: NextRequest) {
   requestHeaders.set('x-user-id', payload.user_id)
   requestHeaders.set('x-user-role', payload.role)
 
-  // Get allowed paths based on user role from protectedRoutes
+  // Get allowed paths based on user role
   const allowedPaths = protectedRoutes
     .filter(route => route.roles.includes(payload.role))
     .map(route => route.path)
 
-  // Check if current path is allowed for user's role
+  // Check if current path is allowed
   const isPathAllowed = allowedPaths.some(allowedPath => 
     path === allowedPath || path.startsWith(allowedPath + '/')
   )
@@ -125,7 +111,6 @@ export async function middleware(request: NextRequest) {
   if (!isPathAllowed) {
     console.log(`[Middleware] Access denied for role ${payload.role} to path ${path}`)
     console.log(`Allowed paths for role ${payload.role}:`, allowedPaths)
-    // Add redirect URL to prevent infinite redirects
     if (!path.startsWith('/unauthorized')) {
       return NextResponse.redirect(new URL('/unauthorized', request.url))
     }
@@ -143,13 +128,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public paths
-     */
     '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
 }
