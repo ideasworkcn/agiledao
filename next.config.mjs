@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
+    assetPrefix: process.env.NEXT_PUBLIC_BASE_URL,
     basePath:  '',
+    trailingSlash: false, // 禁用尾部斜杠
     experimental: {
         forceSwcTransforms: true,
       },

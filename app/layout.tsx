@@ -1,6 +1,5 @@
 
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import { Toaster } from "@/components/ui/toaster"
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
