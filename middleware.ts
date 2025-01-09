@@ -7,12 +7,12 @@ const publicPaths = new Set([
   '/register',
   '/',
   '/documentation',
-  '/api/auth',
-  '/api/md',
   '/workspace', 
   '/unauthorized',
-  '/worklog/user'
+  '/worklog/user',
+  '/api/(.*)', 
 ])
+
 
 type Role = 'Team Member' | 'Scrum Master' | 'Product Owner'
 type RoleAccess = Record<Role, string[]>
